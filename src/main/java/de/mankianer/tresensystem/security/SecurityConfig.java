@@ -49,6 +49,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .sessionManagement()
         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and();
+    http.headers().frameOptions().sameOrigin();
 
     // Set unauthorized requests exception handler
     http = http
@@ -66,15 +67,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     // Set permissions on endpoints
     http.authorizeRequests()
         // Our public endpoints
-        .antMatchers("/api/public/**").permitAll()
-        .antMatchers(HttpMethod.GET, "/api/author/**").permitAll()
-        .antMatchers(HttpMethod.POST, "/api/author/search").permitAll()
-        .antMatchers(HttpMethod.GET, "/api/book/**").permitAll()
-        .antMatchers(HttpMethod.POST, "/api/book/search").permitAll()
+        .antMatchers("/h2-console*/**").permitAll()
+        .antMatchers(HttpMethod.POST,"/token").permitAll()
+        .antMatchers( "/order**").permitAll()
+        .antMatchers(HttpMethod.GET, "/product*/**").permitAll()
+        .antMatchers(HttpMethod.POST, "/user*/**").permitAll()
+        .antMatchers(HttpMethod.POST, "/bar/**").permitAll()
         // Our private endpoints
-        .antMatchers("/api/admin/user/**").hasAuthority("USER_ADMIN")
-        .antMatchers("/api/author/**").hasAuthority("AUTHOR_ADMIN")
-        .antMatchers("/api/book/**").hasAuthority("BOOK_ADMIN")
+        .antMatchers(HttpMethod.GET, "/product*/**").hasAuthority("USER")
+        .antMatchers(HttpMethod.POST, "/user*/**").hasAuthority("USER")
+        .antMatchers(HttpMethod.POST, "/bar/**").hasAuthority("BARKEEPER")
         .anyRequest().authenticated();
 
     // Add JWT token filter

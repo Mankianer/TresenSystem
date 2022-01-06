@@ -1,6 +1,7 @@
 package de.mankianer.tresensystem.security;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -32,14 +33,21 @@ public class JwtTokenFilter extends OncePerRequestFilter {
       FilterChain chain)
       throws ServletException, IOException {
     // Get authorization header and validate
-    final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
-    if (header != null && header.isEmpty() || !header.startsWith("Bearer ")) {
-      chain.doFilter(request, response);
-      return;
+    String requestToken = request.getHeader(HttpHeaders.AUTHORIZATION);
+    if (!isBearer_Token(requestToken)) {
+      if(request.getCookies() != null) {
+        requestToken = Arrays.stream(request.getCookies()).filter(c -> {
+          return c.getName().equals(JwtTokenUtil.AuthorizationHeaderName);
+        }).findFirst().map(c -> c.getValue().replaceFirst("\\+", " ")).orElse(null);
+      }
+      if (!isBearer_Token(requestToken)) {
+        chain.doFilter(request, response);
+        return;
+      }
     }
 
     // Get jwt token and validate
-    final String token = header.split(" ")[1].trim();
+    final String token = requestToken.split(" ")[1].trim();
     if (!jwtTokenUtil.isTokenExpired(token)) {
       chain.doFilter(request, response);
       return;
@@ -63,6 +71,10 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
     SecurityContextHolder.getContext().setAuthentication(authentication);
     chain.doFilter(request, response);
+  }
+
+  private boolean isBearer_Token(String requestToken) {
+    return requestToken != null && !requestToken.startsWith("Bearer ");
   }
 
 }

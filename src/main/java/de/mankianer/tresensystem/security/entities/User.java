@@ -1,7 +1,10 @@
 package de.mankianer.tresensystem.security.entities;
 
+import de.mankianer.tresensystem.entities.Order;
 import java.util.Collection;
+import java.util.List;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -21,6 +24,9 @@ public class User implements UserDetails {
 
   @OneToMany(mappedBy = "user")
   private Collection<Authority> authorities;
+
+//  @OneToMany(mappedBy = "purchaser", fetch = FetchType.LAZY)
+//  private List<Order> orders;
 
   @Override
   public String getPassword() {

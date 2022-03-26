@@ -8,7 +8,17 @@ import org.springframework.security.core.GrantedAuthority;
 @Data
 @Entity
 public class Authority implements GrantedAuthority {
+
   @Id
-  String authority;
+  AuthorityEnum authority;
   String user;
+
+  public enum AuthorityEnum {
+    ROLE_USER, ROLE_ADMIN, ROLE_BARKEEPER;
+  }
+
+  @Override
+  public String getAuthority() {
+    return authority.name();
+  }
 }

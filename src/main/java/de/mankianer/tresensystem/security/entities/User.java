@@ -25,9 +25,6 @@ public class User implements UserDetails {
   @OneToMany(mappedBy = "user")
   private Collection<Authority> authorities;
 
-//  @OneToMany(mappedBy = "purchaser", fetch = FetchType.LAZY)
-//  private List<Order> orders;
-
   @Override
   public String getPassword() {
     return hashedPassword;

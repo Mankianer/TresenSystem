@@ -19,16 +19,23 @@ public class OrderService {
     this.orderRepository = orderRepository;
   }
 
+  /**
+   * @param user
+   * @return the list of orders of the user
+   */
   public List<Order> getOrders(User user) {
     if(user.getAuthorities().contains(AuthorityEnum.ROLE_BARKEEPER)) {
       return orderRepository.findAllByCreatedAfter(LocalDateTime.now().minusHours(2));
     }
-//    return orderRepository.findAllByPurchaser(user.getUsername());
-    return null;
+    return orderRepository.findAllByPurchaser(user);
   }
 
+  /**
+   * @param id
+   * @return the new order
+   */
   public Order createOrder(User user, Order order) {
-//    order.setPurchaser(user.getUsername());
+    order.setPurchaser(user);
     return orderRepository.save(order);
   }
 
@@ -39,9 +46,9 @@ public class OrderService {
   public Order updateOrder(User user, Order order) throws OrderNotFound, UpdateNotAllowedByUser {
     Order orderToUpdate = orderRepository.findById(order.getId())
         .orElseThrow(() -> new OrderNotFound("id: " + order.getId()));
-//    if (orderToUpdate.getPurchaser().equals(user)) {
-//      return orderRepository.save(order);
-//    }
+    if (orderToUpdate.getPurchaser().equals(user)) {
+      return orderRepository.save(order);
+    }
     throw new UpdateNotAllowedByUser(user);
   }
 }

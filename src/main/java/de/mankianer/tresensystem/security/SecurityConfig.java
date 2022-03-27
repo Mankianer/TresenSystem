@@ -80,10 +80,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // Our public endpoints
         .antMatchers("/h2-console*/**").permitAll()
         .antMatchers(HttpMethod.POST,"/token").permitAll()
-        .antMatchers(HttpMethod.GET, "/order*/**").permitAll()
         .antMatchers(HttpMethod.GET, "/product*/**").permitAll()
-        .antMatchers(HttpMethod.POST, "/user*/**").permitAll()
-        .antMatchers(HttpMethod.POST, "/bar/**").permitAll()
+        .antMatchers( "/user*/**").permitAll()
+        .antMatchers( "/bar/**").permitAll()
         // Our private endpoints
         .antMatchers(HttpMethod.GET, "/order*/**").hasAuthority(AuthorityEnum.USER.name())
         .antMatchers(HttpMethod.GET, "/product*/**").hasAuthority(AuthorityEnum.USER.name())

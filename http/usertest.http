@@ -1,0 +1,58 @@
+# Setup User and Products
+### get admin token
+POST localhost:8080/token
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin"
+}
+
+> {% client.global.set("auth_token_admin", "" + response.body); %}
+
+### Create User
+POST http://localhost:8080/user
+Content-Type: application/json
+Authorization: Bearer {{auth_token_admin}}
+
+{
+  "username": "user",
+  "password": "user",
+  "authorities": [
+    "USER"
+  ]
+}
+
+### get User Token
+POST localhost:8080/token
+Content-Type: application/json
+
+{
+  "username": "user",
+  "password": "user"
+}
+
+> {% client.global.set("auth_token_user", "" + response.body); %}
+
+### Create Product
+POST http://localhost:8080/product
+Content-Type: application/json
+Authorization: Bearer {{auth_token_admin}}
+
+{
+  "name": "product",
+  "price": "100"
+}
+
+###
+# Start Testing
+### Create order
+POST http://localhost:8080/order
+Content-Type: application/json
+Authorization: Bearer {{auth_token_user}}
+
+### Check order status
+
+### Update order
+
+### Check order

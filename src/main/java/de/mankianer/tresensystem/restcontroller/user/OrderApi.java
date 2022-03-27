@@ -37,7 +37,7 @@ public class OrderApi {
     }
   }
 
-  @PostMapping("order/{id}")
+  @PostMapping("order/")
   public ResponseEntity createOrder(Authentication authentication, @RequestBody Order order) {
     User user = (User) authentication.getPrincipal();
     return ResponseEntity.ok(orderService.createOrderbyUser(user, order));

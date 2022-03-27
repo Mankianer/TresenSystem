@@ -1,4 +1,4 @@
-package de.mankianer.tresensystem.exeptions.order;
+package de.mankianer.tresensystem.exeptions;
 
 public class UserExistsException extends Exception {
 

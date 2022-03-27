@@ -80,16 +80,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // Our public endpoints
         .antMatchers("/h2-console*/**").permitAll()
         .antMatchers(HttpMethod.POST,"/token").permitAll()
-        .antMatchers(HttpMethod.GET, "/product*/**").permitAll()
+        .antMatchers( "/product*/**").permitAll()
         .antMatchers( "/user*/**").permitAll()
         .antMatchers( "/bar/**").permitAll()
         // Our private endpoints
         .antMatchers(HttpMethod.GET, "/order*/**").hasAuthority(AuthorityEnum.USER.name())
-        .antMatchers(HttpMethod.POST, "/user*/**").hasAuthority(AuthorityEnum.USER.name())
         .antMatchers(HttpMethod.POST, "/bar/**").hasAuthority(AuthorityEnum.BARKEEPER.name())
+        //product endpoints
         .antMatchers(HttpMethod.POST, "/product*/**").hasAuthority(AuthorityEnum.ADMIN.name())
         .antMatchers(HttpMethod.PUT, "/product*/**").hasAuthority(AuthorityEnum.ADMIN.name())
         .antMatchers(HttpMethod.DELETE, "/product*/**").hasAuthority(AuthorityEnum.ADMIN.name())
+        //users endpoints
+        .antMatchers(HttpMethod.GET, "/user*/**").hasAuthority(AuthorityEnum.ADMIN.name())
+        .antMatchers(HttpMethod.POST, "/user*/**").hasAuthority(AuthorityEnum.ADMIN.name())
+        .antMatchers(HttpMethod.PUT, "/user*/**").hasAuthority(AuthorityEnum.ADMIN.name())
+        .antMatchers(HttpMethod.DELETE, "/user*/**").hasAuthority(AuthorityEnum.ADMIN.name())
         .anyRequest().authenticated();
 
     // Add JWT token filter

@@ -3,6 +3,7 @@ package de.mankianer.tresensystem.security;
 import de.mankianer.tresensystem.security.entities.Authority;
 import de.mankianer.tresensystem.security.entities.Authority.AuthorityEnum;
 import de.mankianer.tresensystem.security.entities.User;
+import de.mankianer.tresensystem.services.UserService;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,37 +18,23 @@ public class StartUpComponent {
 
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
+  private final UserService userService;
 
   public StartUpComponent(UserRepository userRepository,
-      PasswordEncoder passwordEncoder) {
+      PasswordEncoder passwordEncoder, UserService userService) {
     this.userRepository = userRepository;
     this.passwordEncoder = passwordEncoder;
+    this.userService = userService;
   }
 
   @PostConstruct
   public void init() {
     try {
-      userRepository.save(newUser("admin", "admin", AuthorityEnum.ADMIN, AuthorityEnum.USER));
+      userRepository.save(userService.newUser("admin", "admin", AuthorityEnum.ADMIN, AuthorityEnum.USER));
       log.info("Admin was created: admin/admin");
     } catch (Exception e) {
       log.warn("Admin already exists");
     }
   }
 
-  /**
-   * Creates a new user.
-   *
-   * @param password get encoded with {@link PasswordEncoder}
-   * @return unsaved user
-   */
-  public User newUser(String username, String password, AuthorityEnum... authorities) {
-    User user = new User();
-    user.setUsername(username);
-    user.setHashedPassword(passwordEncoder.encode(password));
-    List<Authority> authorityList = Arrays.stream(authorities)
-        .map(e -> new Authority(null, e, user.getUsername()))
-        .collect(Collectors.toList());
-    user.setAuthorities(authorityList);
-    return user;
-  }
 }

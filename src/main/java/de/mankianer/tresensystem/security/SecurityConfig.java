@@ -1,9 +1,8 @@
 package de.mankianer.tresensystem.security;
 
-import de.mankianer.tresensystem.security.UserRepo;
+import de.mankianer.tresensystem.security.entities.Authority.AuthorityEnum;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Role;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -22,17 +21,17 @@ import org.springframework.web.filter.CorsFilter;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-  private final UserRepo userRepo;
+  private final UserRepository userRepository;
   private final JwtTokenFilter jwtTokenFilter;
 
-  public SecurityConfig(UserRepo userRepo, JwtTokenFilter jwtTokenFilter) {
-    this.userRepo = userRepo;
+  public SecurityConfig(UserRepository userRepository, JwtTokenFilter jwtTokenFilter) {
+    this.userRepository = userRepository;
     this.jwtTokenFilter = jwtTokenFilter;
   }
 
   @Override
   protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-    auth.userDetailsService(username -> userRepo
+    auth.userDetailsService(username -> userRepository
         .findByUsername(username)
         .orElseThrow(
             () -> new UsernameNotFoundException("User: " + username + " not found")
@@ -74,9 +73,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers(HttpMethod.POST, "/user*/**").permitAll()
         .antMatchers(HttpMethod.POST, "/bar/**").permitAll()
         // Our private endpoints
-        .antMatchers(HttpMethod.GET, "/product*/**").hasAuthority("USER")
-        .antMatchers(HttpMethod.POST, "/user*/**").hasAuthority("USER")
-        .antMatchers(HttpMethod.POST, "/bar/**").hasAuthority("BARKEEPER")
+        .antMatchers(HttpMethod.GET, "/product*/**").hasAuthority(AuthorityEnum.USER.name())
+        .antMatchers(HttpMethod.POST, "/user*/**").hasAuthority(AuthorityEnum.USER.name())
+        .antMatchers(HttpMethod.POST, "/bar/**").hasAuthority(AuthorityEnum.BARKEEPER.name())
         .anyRequest().authenticated();
 
     // Add JWT token filter

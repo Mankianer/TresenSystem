@@ -19,12 +19,12 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public class JwtTokenFilter extends OncePerRequestFilter {
 
   private final JwtTokenUtil jwtTokenUtil;
-  private final UserRepo userRepo;
+  private final UserRepository userRepository;
 
   public JwtTokenFilter(JwtTokenUtil jwtTokenUtil,
-      UserRepo userRepo) {
+      UserRepository userRepository) {
     this.jwtTokenUtil = jwtTokenUtil;
-    this.userRepo = userRepo;
+    this.userRepository = userRepository;
   }
 
   @Override
@@ -54,7 +54,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     }
 
     // Get user identity and set it on the spring security context
-    UserDetails userDetails = userRepo
+    UserDetails userDetails = userRepository
         .findByUsername(jwtTokenUtil.getUsernameFromToken(token))
         .orElse(null);
 

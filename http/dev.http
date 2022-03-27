@@ -1,7 +1,15 @@
-POST localhost:8080/token/
+### Authorization by token
+POST localhost:8080/token
 Content-Type: application/json
 
 {
-    "username": "admin",
-    "password": "admin"
+  "username": "admin",
+  "password": "admin"
 }
+
+> {% client.global.set("auth_token", "" + response.body); %}
+
+###
+GET localhost:8080/order/s/
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json

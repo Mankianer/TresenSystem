@@ -32,7 +32,7 @@ public class User implements UserDetails {
   private boolean isActive = true;
 
 
-  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   private Collection<Authority> authorities;
 
   @Override

@@ -27,7 +27,7 @@ public class StartUpComponent {
   @PostConstruct
   public void init() {
     try {
-      userRepository.save(newUser("admin", "admin", AuthorityEnum.ADMIN));
+      userRepository.save(newUser("admin", "admin", AuthorityEnum.ADMIN, AuthorityEnum.USER));
       log.info("Admin was created: admin/admin");
     } catch (Exception e) {
       log.warn("Admin already exists");

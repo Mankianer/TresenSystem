@@ -85,9 +85,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers( "/bar/**").permitAll()
         // Our private endpoints
         .antMatchers(HttpMethod.GET, "/order*/**").hasAuthority(AuthorityEnum.USER.name())
-        .antMatchers(HttpMethod.GET, "/product*/**").hasAuthority(AuthorityEnum.USER.name())
         .antMatchers(HttpMethod.POST, "/user*/**").hasAuthority(AuthorityEnum.USER.name())
         .antMatchers(HttpMethod.POST, "/bar/**").hasAuthority(AuthorityEnum.BARKEEPER.name())
+        .antMatchers(HttpMethod.POST, "/product*/**").hasAuthority(AuthorityEnum.ADMIN.name())
+        .antMatchers(HttpMethod.PUT, "/product*/**").hasAuthority(AuthorityEnum.ADMIN.name())
+        .antMatchers(HttpMethod.DELETE, "/product*/**").hasAuthority(AuthorityEnum.ADMIN.name())
         .anyRequest().authenticated();
 
     // Add JWT token filter

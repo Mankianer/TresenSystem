@@ -1,0 +1,7 @@
+POST localhost:8080/token/
+Content-Type: application/json
+
+{
+    "username": "admin",
+    "password": "admin"
+}

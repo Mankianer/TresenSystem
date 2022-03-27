@@ -32,4 +32,9 @@ public class OrderApi {
     User user = (User) authentication.getPrincipal();
     return orderService.getOrders(user);
   }
+
+  @GetMapping("/")
+  public String test() {
+    return "test";
+  }
 }

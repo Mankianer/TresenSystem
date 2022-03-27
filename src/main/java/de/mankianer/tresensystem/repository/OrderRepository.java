@@ -12,5 +12,5 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
   public List<Order> findAllByPurchaser(User user);
 
-  public List<Order> findAllByCreatedAfter(LocalDateTime date);
+  public List<Order> findAllByCreatedAtAfter(LocalDateTime date);
 }

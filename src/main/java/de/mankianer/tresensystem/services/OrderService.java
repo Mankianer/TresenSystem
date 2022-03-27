@@ -25,7 +25,7 @@ public class OrderService {
    */
   public List<Order> getOrders(User user) {
     if(user.getAuthorities().contains(AuthorityEnum.BARKEEPER)) {
-      return orderRepository.findAllByCreatedAfter(LocalDateTime.now().minusHours(2));
+      return orderRepository.findAllByCreatedAtAfter(LocalDateTime.now().minusHours(2));
     }
     return orderRepository.findAllByPurchaser(user);
   }

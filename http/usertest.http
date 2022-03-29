@@ -37,19 +37,29 @@ Content-Type: application/json
 ### Create Product
 POST http://localhost:8080/product
 Content-Type: application/json
+Accept: application/json
 Authorization: Bearer {{auth_token_admin}}
 
 {
   "name": "product",
   "price": "100"
 }
+> {% client.global.set("product_id", response.body.json.id); %}
 
 ###
 # Start Testing
-### Create order
+### Create Order
 POST http://localhost:8080/order
 Content-Type: application/json
 Authorization: Bearer {{auth_token_user}}
+
+{
+  "products": [
+    {
+      "id": {{product_id}}
+    }
+  ]
+}
 
 ### Check order status
 

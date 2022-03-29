@@ -3,7 +3,6 @@ package de.mankianer.tresensystem.restcontroller.barkeeper;
 import de.mankianer.tresensystem.entities.Order;
 import de.mankianer.tresensystem.exeptions.order.MissingValueException;
 import de.mankianer.tresensystem.exeptions.order.OrderNotFound;
-import de.mankianer.tresensystem.exeptions.order.UpdateNotAllowedByUser;
 import de.mankianer.tresensystem.security.entities.User;
 import de.mankianer.tresensystem.services.OrderService;
 import java.util.List;
@@ -39,7 +38,7 @@ public class BarkeeperOrderApi {
   @PostMapping("order/{id}")
   public ResponseEntity createOrder(Authentication authentication, @RequestBody Order order)
       throws MissingValueException {
-    return ResponseEntity.ok(orderService.createOrderbyBarkeeper(order));
+    return ResponseEntity.ok(orderService.createOrderByBarkeeper(order));
   }
 
   @PutMapping("order/{id}")

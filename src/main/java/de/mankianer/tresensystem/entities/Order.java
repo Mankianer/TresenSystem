@@ -29,7 +29,7 @@ public class Order {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
-  private OderStatus status;
+  private OderStatus status = OderStatus.OPEN;
 
 //  private String purchaser;
   @ManyToOne

@@ -1,8 +1,10 @@
 package de.mankianer.tresensystem.restcontroller.user;
 
 import de.mankianer.tresensystem.entities.Order;
+import de.mankianer.tresensystem.exeptions.ProductNotFoundException;
 import de.mankianer.tresensystem.exeptions.order.OrderNotFound;
 import de.mankianer.tresensystem.exeptions.order.UpdateNotAllowedByUser;
+import de.mankianer.tresensystem.restcontroller.dto.UpdateOrderDTO;
 import de.mankianer.tresensystem.security.entities.User;
 import de.mankianer.tresensystem.services.OrderService;
 import java.util.List;
@@ -38,15 +40,16 @@ public class OrderApi {
   }
 
   @PostMapping("order/")
-  public ResponseEntity createOrder(Authentication authentication, @RequestBody Order order) {
+  public ResponseEntity createOrder(Authentication authentication, @RequestBody UpdateOrderDTO orderDTO)
+      throws ProductNotFoundException {
     User user = (User) authentication.getPrincipal();
-    return ResponseEntity.ok(orderService.createOrderbyUser(user, order));
+    return ResponseEntity.ok(orderService.createOrderbyUser(user, orderService.convertUpdateOrderDTO(orderDTO, true)));
   }
 
   @PutMapping("order/{id}")
-  public ResponseEntity updateOrder(Authentication authentication, @RequestBody Order order)
-      throws OrderNotFound {
-    return ResponseEntity.ok(orderService.updateOrder(order));
+  public ResponseEntity updateOrder(Authentication authentication, @RequestBody UpdateOrderDTO orderDTO)
+      throws OrderNotFound, ProductNotFoundException {
+    return ResponseEntity.ok(orderService.convertUpdateOrderDTO(orderDTO, true));
   }
 
   @GetMapping("orders/")

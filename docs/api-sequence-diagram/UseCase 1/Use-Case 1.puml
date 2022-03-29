@@ -1,0 +1,25 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+title API - Use Case 1 - User Login - JWT-Token
+
+note across #green: Finish
+
+"Client\n(User)" -> "[POST]\n /token": {name}, {hashed-password}
+"Client\n(User)" <- "[POST]\n /token": JWT-Token
+
+newpage Use Case 1 - Abrechnungstoken (QR-Code)
+note across #yellow: Not Started
+
+"Client\n(User)" -> "[GET]\n /user/qr":
+"Client\n(User)" <- "[GET]\n /user/qr": QR-Code
+
+newpage Use Case 1.1 - Bestellhistorie ansehen
+note across #blue: Started
+==Alle Bestellungen==
+"Client\n(User)" -> "[GET]\n /user/orders":
+"Client\n(User)" <- "[GET]\n /user/orders": List<Order>
+==Einzel Bestellungen==
+"Client\n(User)" -> "[GET]\n /user/order/{id}":
+"Client\n(User)" <- "[GET]\n /user/order/{id}": Order
+@enduml

@@ -19,21 +19,21 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class UserApi {
+public class AdminApi {
 
   private final UserService userService;
 
 
-  public UserApi(UserService userService) {
+  public AdminApi(UserService userService) {
     this.userService = userService;
   }
 
-  @GetMapping("/user/{username}")
+  @GetMapping("/admin/{username}")
   public ResponseUserDTO getUser(@PathVariable String username) throws UserNotFoundException {
     return convertUserToResponseUserDTO(userService.findUser(username));
   }
 
-  @PostMapping("/user")
+  @PostMapping("/admin")
   public ResponseUserDTO createUser(@RequestBody CreateUserDTO userDTO,
       @RequestParam(defaultValue = "false") boolean isPasswordHashed)
       throws UserExistsException {
@@ -42,14 +42,14 @@ public class UserApi {
     return convertUserToResponseUserDTO(userService.createUser(user));
   }
 
-  @PutMapping("/user/{username}")
+  @PutMapping("/admin/{username}")
   public ResponseUserDTO updateUser(@PathVariable String username, @RequestBody User user)
       throws UserMissingException {
     user.setUsername(username);
     return convertUserToResponseUserDTO(userService.updateUser(user));
   }
 
-  @DeleteMapping("/user/{username}")
+  @DeleteMapping("/admin/{username}")
   public ResponseUserDTO deleteUser(@PathVariable String username) throws UserNotFoundException {
     return convertUserToResponseUserDTO(userService.deactivateUser(username));
   }

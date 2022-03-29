@@ -1,23 +1,30 @@
 package de.mankianer.tresensystem.services;
 
 import de.mankianer.tresensystem.entities.Order;
+import de.mankianer.tresensystem.exeptions.ProductNotFoundException;
 import de.mankianer.tresensystem.exeptions.order.MissingValueException;
 import de.mankianer.tresensystem.exeptions.order.OrderNotFound;
-import de.mankianer.tresensystem.exeptions.order.UpdateNotAllowedByUser;
 import de.mankianer.tresensystem.repository.OrderRepository;
+import de.mankianer.tresensystem.repository.ProductRepository;
+import de.mankianer.tresensystem.restcontroller.dto.UpdateOrderDTO;
 import de.mankianer.tresensystem.security.entities.Authority.AuthorityEnum;
 import de.mankianer.tresensystem.security.entities.User;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 @Service
 public class OrderService {
 
   private final OrderRepository orderRepository;
+  private final ProductRepository productRepository;
 
-  public OrderService(OrderRepository orderRepository) {
+  public OrderService(OrderRepository orderRepository,
+      ProductRepository productRepository) {
     this.orderRepository = orderRepository;
+    this.productRepository = productRepository;
   }
 
   /**
@@ -51,8 +58,8 @@ public class OrderService {
    * @param order the order to create
    * @return the new order
    */
-  public Order createOrderbyBarkeeper(Order order) throws MissingValueException {
-    if(order.getPurchaser() != null) {
+  public Order createOrderByBarkeeper(Order order) throws MissingValueException {
+    if (order.getPurchaser() != null) {
       throw new MissingValueException("purchaser is needed");
     }
     order.setCreatedByUser(false);
@@ -67,7 +74,7 @@ public class OrderService {
    * @throws OrderNotFound if the order is not found
    */
   public Order getOrderByUserAndId(User user, Long id) throws OrderNotFound {
-    if (user.getAuthorities().contains(AuthorityEnum.BARKEEPER)) {
+    if (user.getAuthorities().contains(AuthorityEnum.BARKEEPER.name())) {
       return orderRepository.findById(id).orElseThrow(() -> new OrderNotFound("id: " + id));
     } else {
       return orderRepository.findByIdAndPurchaser(id, user)
@@ -94,5 +101,19 @@ public class OrderService {
         .orElseThrow(
             () -> new OrderNotFound("id: " + order.getId() + " and user: " + order.getPurchaser()));
     return orderRepository.save(order);
+  }
+
+  public Order convertUpdateOrderDTO(UpdateOrderDTO updateOrderDTO, boolean isCreatedByUser)
+      throws ProductNotFoundException {
+    Order order = new Order();
+    var oProducts = updateOrderDTO.getProducts().stream().map(productRepository::findById).collect(
+        Collectors.toList());
+    if (oProducts.stream().anyMatch(Optional::isEmpty)) {
+      throw new ProductNotFoundException("one or more product(s) not found " + updateOrderDTO.getProducts());
+    }
+    order.setProducts(oProducts.stream().map(Optional::get).collect(Collectors.toList()));
+    order.setPurchaser(updateOrderDTO.getPurchaser());
+    order.setCreatedByUser(isCreatedByUser);
+    return order;
   }
 }

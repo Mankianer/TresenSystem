@@ -1,0 +1,195 @@
+openapi: "3.0.3"
+info:
+  title: "TresenSystem API"
+  description: "TresenSystem API"
+  version: "1.0.0"
+servers:
+  - url: "https://TresenSystem"
+paths:
+  /admin:
+    post:
+      summary: "POST admin"
+      operationId: "createUser"
+      parameters:
+        - name: "isPasswordHashed"
+          in: "query"
+          required: true
+          schema:
+            type: "boolean"
+      responses:
+        "200":
+          description: "OK"
+  /admin/{username}:
+    get:
+      summary: "GET admin/{username}"
+      operationId: "getUser"
+      parameters:
+        - name: "username"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+    put:
+      summary: "PUT admin/{username}"
+      operationId: "updateUser"
+      parameters:
+        - name: "username"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+    delete:
+      summary: "DELETE admin/{username}"
+      operationId: "deleteUser"
+      parameters:
+        - name: "username"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+  /bar/order/{id}:
+    get:
+      summary: "GET bar/order/{id}"
+      operationId: "getOrder"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "number"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+    put:
+      summary: "PUT bar/order/{id}"
+      operationId: "updateOrder"
+      parameters:
+        - name: "id"
+          in: "path"
+      responses:
+        "200":
+          description: "OK"
+    post:
+      summary: "POST bar/order/{id}"
+      operationId: "createOrder"
+      parameters:
+        - name: "id"
+          in: "path"
+      responses:
+        "200":
+          description: "OK"
+  /bar/orders/:
+    get:
+      summary: "GET bar/orders/"
+      operationId: "getAllOrders"
+      responses:
+        "200":
+          description: "OK"
+  /product:
+    post:
+      summary: "POST product"
+      operationId: "createProduct"
+      responses:
+        "200":
+          description: "OK"
+  /product/{id}:
+    get:
+      summary: "GET product/{id}"
+      operationId: "getProductById"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "number"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+    put:
+      summary: "PUT product/{id}"
+      operationId: "updateProduct"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "number"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+    delete:
+      summary: "DELETE product/{id}"
+      operationId: "deleteProduct"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "number"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+  /products:
+    get:
+      summary: "GET products"
+      operationId: "getAllProducts"
+      responses:
+        "200":
+          description: "OK"
+  /token:
+    post:
+      summary: "POST token"
+      operationId: "login"
+      responses:
+        "200":
+          description: "OK"
+  /user/order/:
+    post:
+      summary: "POST user/order/"
+      operationId: "createOrder"
+      responses:
+        "200":
+          description: "OK"
+  /user/order/{id}:
+    get:
+      summary: "GET user/order/{id}"
+      operationId: "getOrder"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "number"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+    put:
+      summary: "PUT user/order/{id}"
+      operationId: "updateOrder"
+      parameters:
+        - name: "id"
+          in: "path"
+      responses:
+        "200":
+          description: "OK"
+  /user/orders/:
+    get:
+      summary: "GET user/orders/"
+      operationId: "getAllOrders"
+      responses:
+        "200":
+          description: "OK"

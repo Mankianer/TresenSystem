@@ -53,8 +53,8 @@ hnote across: User Bestellt via App oder via Token
 "Client\n(Barkeeper)" <- "[PUT]\n /bar/orders/{id}": Order
 
 ==Bestellung ändern==
-"Client\n(User)" -> "[PUT]\n /user/order/{id}": CreateOrder
-"Client\n(User)" <- "[PUT]\n /user/order/{id}": Order
+"Client\n(User)" -> "[PUT]\n /bar/order/{id}": CreateOrder
+"Client\n(User)" <- "[PUT]\n /bar/order/{id}": Order
 
 @enduml
 
@@ -65,6 +65,14 @@ note across #yellow: Not Started
 ==Produkte abfragen (auswählen)==
 "Client\n(Barkeeper)" -> "[GET]\n /public/products/":
 "Client\n(Barkeeper)" <- "[GET]\n /public/products/": Product[]
+
+==Nutzer Liste abfragen==
+"Client\n(Barkeeper)" -> "[GET]\n /bar/users/":
+"Client\n(Barkeeper)" <- "[GET]\n /bar/users/": String[]
+
+==Nutzer via QR-Code abfragen==
+"Client\n(Barkeeper)" -> "[POST]\n /bar/users/": QR-Code
+"Client\n(Barkeeper)" <- "[POST]\n /bar/users/": String
 
 ==Bestellung abschicken==
 "Client\n(Barkeeper)" -> "[POST]\n /bar/orders/": CreateOrderBar

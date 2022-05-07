@@ -12,6 +12,37 @@ note across #green: Finish
 ==Teilnehmer hinzufügen/bearbeiten==
 "Client\n(Admin)" -> "[POST|PUT]\n /admin/user/{username}": CreateUser
 "Client\n(Admin)" <- "[POST|PUT]\n /admin/user/{username}": User
+@enduml
+@startuml
+title Use Case 4.1.1.1 Abrechnungstoken verwalten
+note across #yellow: Not Started
 
+==QR-Code erstellen==
+"Client\n(Admin)" -> "[POST]\n /admin/user/{username}/qr":
+"Client\n(Admin)" <- "[POST]\n /admin/user/{username}/qr": QR-Code-Status
+
+==QR-Code deaktivieren==
+"Client\n(Admin)" -> "[DELETE]\n /admin/user/{username}/qr":
+"Client\n(Admin)" <- "[DELETE]\n /admin/user/{username}/qr": QR-Code-Status
+
+==QR-Code zum Drucken abfragen==
+"Client\n(Admin)" -> "[GET]\n /admin/user/{username}/qr":
+"Client\n(Admin)" <- "[GET]\n /admin/user/{username}/qr": QR-Code
+@enduml
+@startuml
+title Use Case 4.2 Produkte Verwalten
+note across #blue: Started
+
+==Produkt abfragen/löschen==
+"Client\n(Admin)" -> "[GET|DELETE]\n /admin/product/{id}"
+"Client\n(Admin)" <- "[GET|DELETE]\n /admin/product/{id}": Product
+
+==Teilnehmer bearbeiten==
+"Client\n(Admin)" -> "[PUT]\n /admin/product/{id}": Product
+"Client\n(Admin)" <- "[PUT]\n /admin/product/{id}": Product
+
+==Teilnehmer hinzufügen==
+"Client\n(Admin)" -> "[POST]\n /admin/product/": Product
+"Client\n(Admin)" <- "[POST]\n /admin/product/": Product
 
 @enduml

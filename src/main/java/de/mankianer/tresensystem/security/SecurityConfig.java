@@ -80,6 +80,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // Our public endpoints
         .antMatchers("/h2-console*/**").permitAll()
         .antMatchers(HttpMethod.POST,"/token").permitAll()
+        .antMatchers( "/v3/**").permitAll()
         .antMatchers( "/product*/**").permitAll()
         .antMatchers( "/user*/**").permitAll()
         .antMatchers( "/bar/**").permitAll()

@@ -1,0 +1,17 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+title API - Use Case 4.1.1 - Teilnehmer - Verwalten
+
+note across #green: Finish
+
+==Teilnehmer abfragen/löschen==
+"Client\n(Admin)" -> "[GET|DELETE]\n /admin/user/{username}"
+"Client\n(Admin)" <- "[GET|DELETE]\n /admin/user/{username}": User
+
+==Teilnehmer hinzufügen/bearbeiten==
+"Client\n(Admin)" -> "[POST|PUT]\n /admin/user/{username}": CreateUser
+"Client\n(Admin)" <- "[POST|PUT]\n /admin/user/{username}": User
+
+
+@enduml

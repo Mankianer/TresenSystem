@@ -1,0 +1,80 @@
+# Setup Login
+### get admin token
+POST localhost:8080/token
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin"
+}
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 202, "Response status is not 200");
+});
+client.global.set("auth_token_admin", "" + response.body);
+%}
+
+### UseCase - Teilnehmer hinzufügen
+POST localhost:8080/admin/user/test
+Content-Type: application/json
+
+{
+  "username": "test",
+  "password": "admin",
+  "authorities": ["USER"]
+}
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+client.global.set("auth_token_admin", "" + response.body);
+%}
+
+### UseCase - Teilnehmer abfragen
+GET localhost:8080/admin/user/test
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+client.global.set("auth_token_admin", "" + response.body);
+%}
+
+### UseCase - Teilnehmer updaten
+PUT localhost:8080/admin/user/test
+Content-Type: application/json
+
+{
+  "username": "test",
+  "authorities": ["ADMIN"]
+}
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+client.global.set("auth_token_admin", "" + response.body);
+%}
+
+
+### UseCase - Teilnehmer löschen
+DELETE localhost:8080/admin/user/test
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+client.global.set("auth_token_admin", "" + response.body);
+%}
+
+### UseCase - Teilnehmer abfragen 2 (nach dem löschen)
+GET localhost:8080/admin/user/test
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+client.global.set("auth_token_admin", "" + response.body);
+%}

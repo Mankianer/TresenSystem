@@ -8,7 +8,9 @@ import de.mankianer.tresensystem.restcontroller.dto.ResponseUserDTO;
 import de.mankianer.tresensystem.security.entities.Authority;
 import de.mankianer.tresensystem.security.entities.User;
 import de.mankianer.tresensystem.services.UserService;
+
 import java.util.stream.Collectors;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,42 +23,36 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class AdminApi {
 
-  private final UserService userService;
+    private final UserService userService;
 
 
-  public AdminApi(UserService userService) {
-    this.userService = userService;
-  }
+    public AdminApi(UserService userService) {
+        this.userService = userService;
+    }
 
-  @GetMapping("/admin/{username}")
-  public ResponseUserDTO getUser(@PathVariable String username) throws UserNotFoundException {
-    return convertUserToResponseUserDTO(userService.findUser(username));
-  }
+    @GetMapping("/admin/user/{username}")
+    public ResponseUserDTO getUser(@PathVariable String username) throws UserNotFoundException {
+        return convertUserToResponseUserDTO(userService.findUser(username));
+    }
 
-  @PostMapping("/admin")
-  public ResponseUserDTO createUser(@RequestBody CreateUserDTO userDTO,
-      @RequestParam(defaultValue = "false") boolean isPasswordHashed)
-      throws UserExistsException {
-    User user = userService.newUser(userDTO.getUsername(), userDTO.getPassword(), isPasswordHashed,
-        userDTO.getAuthorities());
-    return convertUserToResponseUserDTO(userService.createUser(user));
-  }
+    @PostMapping("/admin/user/{username}")
+    public ResponseUserDTO createUser(@PathVariable String username, @RequestBody CreateUserDTO userDTO, @RequestParam(defaultValue = "false") boolean isPasswordHashed) throws UserExistsException {
+        User user = userService.newUser(username, userDTO.getPassword(), isPasswordHashed, userDTO.getAuthorities());
+        return convertUserToResponseUserDTO(userService.createUser(user));
+    }
 
-  @PutMapping("/admin/{username}")
-  public ResponseUserDTO updateUser(@PathVariable String username, @RequestBody User user)
-      throws UserMissingException {
-    user.setUsername(username);
-    return convertUserToResponseUserDTO(userService.updateUser(user));
-  }
+    @PutMapping("/admin/user/{username}")
+    public ResponseUserDTO updateUser(@PathVariable String username, @RequestBody CreateUserDTO userDTO, @RequestParam(defaultValue = "false") boolean isPasswordHashed) throws UserMissingException {
+        User user = userService.newUser(username, userDTO.getPassword(), isPasswordHashed, userDTO.getAuthorities());
+        return convertUserToResponseUserDTO(userService.updateUser(user));
+    }
 
-  @DeleteMapping("/admin/{username}")
-  public ResponseUserDTO deleteUser(@PathVariable String username) throws UserNotFoundException {
-    return convertUserToResponseUserDTO(userService.deactivateUser(username));
-  }
+    @DeleteMapping("/admin/user/{username}")
+    public ResponseUserDTO deleteUser(@PathVariable String username) throws UserNotFoundException {
+        return convertUserToResponseUserDTO(userService.deactivateUser(username));
+    }
 
-  private ResponseUserDTO convertUserToResponseUserDTO(User user) {
-    return new ResponseUserDTO(user.getUsername(),
-        user.getAuthorities().stream().map(Authority::getAuthority).collect(Collectors.toList()),
-        user.isEnabled());
-  }
+    private ResponseUserDTO convertUserToResponseUserDTO(User user) {
+        return new ResponseUserDTO(user.getUsername(), user.getAuthorities().stream().map(Authority::getAuthority).collect(Collectors.toList()), user.isEnabled());
+    }
 }

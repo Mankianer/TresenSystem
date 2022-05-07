@@ -27,7 +27,7 @@ public class Authority implements GrantedAuthority {
   String user;
 
   public enum AuthorityEnum {
-    USER, ADMIN, BARKEEPER;
+    USER, ADMIN, BARKEEPER, TREASURER;
   }
 
   @Override

@@ -81,7 +81,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers("/h2-console*/**").permitAll()
         .antMatchers(HttpMethod.POST,"/token").permitAll()
         .antMatchers( "/v3/**").permitAll()
-        .antMatchers( "/product*/**").permitAll()
+        .antMatchers( HttpMethod.GET, "/product*/**").permitAll()
         .antMatchers( "/user*/**").permitAll()
         .antMatchers( "/bar/**").permitAll()
         .antMatchers("/order*/**").permitAll()
@@ -89,10 +89,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers( "/order*/**").hasAuthority(AuthorityEnum.USER.name())
         .antMatchers(HttpMethod.POST, "/bar/**").hasAuthority(AuthorityEnum.BARKEEPER.name())
         .antMatchers("/user/**").hasAuthority(AuthorityEnum.USER.name())
-        //product endpoints
-        .antMatchers(HttpMethod.POST, "/product*/**").hasAuthority(AuthorityEnum.ADMIN.name())
-        .antMatchers(HttpMethod.PUT, "/product*/**").hasAuthority(AuthorityEnum.ADMIN.name())
-        .antMatchers(HttpMethod.DELETE, "/product*/**").hasAuthority(AuthorityEnum.ADMIN.name())
         //users endpoints
         .antMatchers(HttpMethod.GET, "/admin*/**").hasAuthority(AuthorityEnum.ADMIN.name())
         .antMatchers(HttpMethod.POST, "/admin*/**").hasAuthority(AuthorityEnum.ADMIN.name())

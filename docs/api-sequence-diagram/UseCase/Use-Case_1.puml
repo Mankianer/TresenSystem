@@ -22,8 +22,77 @@ title Use Case 1.1 - Bestellhistorie ansehen
 note across #blue: Started
 ==Alle Bestellungen==
 "Client\n(User)" -> "[GET]\n /user/orders":
-"Client\n(User)" <- "[GET]\n /user/orders": List<Order>
+"Client\n(User)" <- "[GET]\n /user/orders": Order[]
 ==Einzel Bestellungen==
 "Client\n(User)" -> "[GET]\n /user/order/{id}":
 "Client\n(User)" <- "[GET]\n /user/order/{id}": Order
+@enduml
+
+@startuml
+title Use Case 1.2 - Kostenlimit festlegen
+note across #yellow: Not Started
+==Kostenlimit Abfragen==
+"Client\n(User)" -> "[GET]\n /user/cost/limit/":
+"Client\n(User)" <- "[GET]\n /user/cost/limit/": CostLimit
+==Kostenlimit festlegen==
+"Client\n(User)" -> "[POST]\n /user/cost/limit/": CostLimit
+"Client\n(User)" <- "[POST]\n /user/cost/limit/": CostLimit
+@enduml
+
+@startuml
+title Use Case 1.3 - Getränk bestellen
+note across #yellow: Not Started
+
+hnote across: User Bestellt via App oder via Token
+==Barkeeper ruft OrderStream Auf==
+"Client\n(Barkeeper)" -> "[GET]\n /bar/orders/":
+"Client\n(Barkeeper)" <- "[GET]\n /bar/orders/": Stream<Order[]>
+
+==Barkeeper nimmt Bestellung an/ ändert Status/ lehnt ab==
+"Client\n(Barkeeper)" -> "[PUT]\n /bar/orders/{id}": OrderStatus
+"Client\n(Barkeeper)" <- "[PUT]\n /bar/orders/{id}": Order
+
+==Bestellung ändern==
+"Client\n(User)" -> "[PUT]\n /user/order/{id}": CreateOrder
+"Client\n(User)" <- "[PUT]\n /user/order/{id}": Order
+
+@enduml
+
+@startuml
+title Use Case 1.3.1 - Getränk bestellen - via Token
+note across #yellow: Not Started
+
+==Produkte abfragen (auswählen)==
+"Client\n(Barkeeper)" -> "[GET]\n /public/products/":
+"Client\n(Barkeeper)" <- "[GET]\n /public/products/": Product[]
+
+==Bestellung abschicken==
+"Client\n(Barkeeper)" -> "[POST]\n /bar/orders/": CreateOrderBar
+"Client\n(Barkeeper)" <- "[POST]\n /bar/orders/": Order
+@enduml
+
+@startuml
+title Use Case 1.3.2 - Getränk bestellen - via App
+note across #yellow: Not Started
+==Produkte abfragen (auswählen)==
+"Client\n(User)" -> "[GET]\n /public/products/":
+"Client\n(User)" <- "[GET]\n /public/products/": Product[]
+
+==Bestellung abschicken==
+"Client\n(User)" -> "[POST]\n /user/order/": CreateOrder
+"Client\n(User)" <- "[POST]\n /user/order/": Order
+
+==Bestellstatus abfragen==
+"Client\n(User)" -> "[GET]\n /user/order/{id}":
+"Client\n(User)" <- "[GET]\n /user/order/{id}": Order
+
+==Bestellstatus Stornieren==
+"Client\n(User)" -> "[DELETE]\n /user/order/{id}":
+"Client\n(User)" <- "[DELETE]\n /user/order/{id}": Order
+note right #orange: Error if Order is started.
+
+==Bestellung Ändern==
+"Client\n(User)" -> "[PUT]\n /user/order/{id}": CreateOrder
+"Client\n(User)" <- "[PUT]\n /user/order/{id}": Order
+
 @enduml

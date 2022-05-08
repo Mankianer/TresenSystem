@@ -1,0 +1,55 @@
+@startuml
+title Use Case 2.1 - Bestellung einsehen
+note across #yellow: Not Started
+
+==Barkeeper ruft Bestellungen ab==
+"Client\n(Barkeeper)" -> "[GET]\n /bar/orders/":
+"Client\n(Barkeeper)" <- "[GET]\n /bar/orders/": Order[]
+
+@enduml
+
+@startuml
+title Use Case 2.2 - Bestellung erhalten
+note across #yellow: Not Started
+
+hnote across: User bestellt via App oder via Token
+==Barkeeper ruft OrderStream Auf==
+"Client\n(Barkeeper)" -> "[GET]\n /bar/orders/":
+"Client\n(Barkeeper)" <- "[GET]\n /bar/orders/": Stream<Order[]>
+
+@enduml
+
+@startuml
+title Use Case 2.3 - Bestellung abrechnen/herausgeben
+note across #yellow: Not Started
+
+==Barkeeper nimmt Bestellung an/ ändert Status/ lehnt ab==
+"Client\n(Barkeeper)" -> "[PUT]\n /bar/orders/{id}": OrderStatus
+"Client\n(Barkeeper)" <- "[PUT]\n /bar/orders/{id}": Order
+
+@enduml
+
+@startuml
+title Use Case 2.4 - Bestellung aufnehmen
+note across #yellow: Not Started
+
+==Nutzer Liste abfragen==
+"Client\n(Barkeeper)" -> "[GET]\n /bar/users/":
+"Client\n(Barkeeper)" <- "[GET]\n /bar/users/": String[]
+
+==Nutzer via QR-Code abfragen==
+"Client\n(Barkeeper)" -> "[POST]\n /bar/users/": QR-Code
+"Client\n(Barkeeper)" <- "[POST]\n /bar/users/": String
+
+==Produkte abfragen (auswählen)==
+"Client\n(Barkeeper)" -> "[GET]\n /public/products/":
+"Client\n(Barkeeper)" <- "[GET]\n /public/products/": Product[]
+
+==Bestellung abschicken==
+"Client\n(Barkeeper)" -> "[POST]\n /bar/orders/": CreateOrderBar
+"Client\n(Barkeeper)" <- "[POST]\n /bar/orders/": Order
+
+==Bestellung ändern==
+"Client\n(Barkeeper)" -> "[PUT]\n /bar/order/{id}": CreateOrder
+"Client\n(Barkeeper)" <- "[PUT]\n /bar/order/{id}": Order
+@enduml

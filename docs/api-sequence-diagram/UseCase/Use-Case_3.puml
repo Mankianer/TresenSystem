@@ -1,0 +1,29 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+title API - Use Case 3.1 - Abrechnung erstellen
+
+note across #yellow: Not Started
+
+==Erstellt Abrechnung bis und\n vergibt AbrechnungsId==
+"Client\n(Kassenwart)" -> "[POST]\n /treasurer/invoice/": {?tillDate}
+"Client\n(Kassenwart)" <- "[POST]\n /treasurer/invoice/": Invoice
+
+@enduml
+
+@startuml
+'https://plantuml.com/sequence-diagram
+
+title API - Use Case 3.2 - Abrechnung verwalten
+
+note across #yellow: Not Started
+
+==Fragt Abrechnung ab==
+"Client\n(Kassenwart)" -> "[GET]\n /treasurer/invoice/":
+"Client\n(Kassenwart)" <- "[GET]\n /treasurer/invoice/": Invoice[]
+
+"Client\n(Kassenwart)" -> "[GET]\n /treasurer/invoice/{id}": {?format: json|pdf}
+"Client\n(Kassenwart)" <- "[GET]\n /treasurer/invoice/{id}": Invoice
+
+
+@enduml

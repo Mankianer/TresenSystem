@@ -1,6 +1,5 @@
 package de.mankianer.tresensystem.exeptions.order;
 
-import lombok.Data;
 
 public class MissingPurchaserException extends Exception {
 

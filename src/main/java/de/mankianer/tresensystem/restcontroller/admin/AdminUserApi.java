@@ -8,9 +8,6 @@ import de.mankianer.tresensystem.restcontroller.dto.ResponseUserDTO;
 import de.mankianer.tresensystem.security.entities.Authority;
 import de.mankianer.tresensystem.security.entities.User;
 import de.mankianer.tresensystem.services.UserService;
-
-import java.util.stream.Collectors;
-
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -47,6 +44,7 @@ public class AdminUserApi {
     }
 
     private ResponseUserDTO convertUserToResponseUserDTO(User user) {
-        return new ResponseUserDTO(user.getUsername(), user.getAuthorities().stream().map(Authority::getAuthority).collect(Collectors.toList()), user.isEnabled());
+        return new ResponseUserDTO(user.getUsername(), user.getAuthorities().stream().map(Authority::getAuthorityEnum)
+                .map(Authority.AuthorityEnum::name).toList(), user.isEnabled());
     }
 }

@@ -3,21 +3,22 @@ package de.mankianer.tresensystem.security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
+
 @Component
 public class JwtTokenUtil {
 
-  public static String AuthorizationHeaderName = "Authorization";
+  public static final String AUTHORIZATION_HEADER_NAME = "Authorization";
 
   @Value("${JWT_TOKEN_VALIDITY}")
-  public long JWT_TOKEN_VALIDITY;
+  public long jwtTokenValidity;
 
   @Value("${jwt.secret}")
   private String secret;
@@ -43,7 +44,7 @@ public class JwtTokenUtil {
   }
 
   //check if the token has expired
-  public Boolean isTokenExpired(String token) {
+  public boolean isTokenExpired(String token) {
     final Date expiration = getExpirationDateFromToken(token);
     return expiration.before(new Date());
   }
@@ -62,8 +63,8 @@ public class JwtTokenUtil {
   private String doGenerateToken(Map<String, Object> claims, String subject) {
 
     return Jwts.builder().setClaims(claims).setSubject(subject)
-        .setIssuedAt(new Date(System.currentTimeMillis()))
-        .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000))
+            .setIssuedAt(new Date(System.currentTimeMillis()))
+            .setExpiration(new Date(System.currentTimeMillis() + jwtTokenValidity * 1000))
         .signWith(SignatureAlgorithm.HS256, secret).compact();
   }
 

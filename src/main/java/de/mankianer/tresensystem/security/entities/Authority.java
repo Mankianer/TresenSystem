@@ -8,7 +8,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Generated;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -22,16 +21,16 @@ public class Authority implements GrantedAuthority {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
 
+
   @Enumerated(EnumType.STRING)
-  AuthorityEnum authority;
+  AuthorityEnum authorityEnum;
   String user;
 
   public enum AuthorityEnum {
     USER, ADMIN, BARKEEPER, TREASURER;
   }
 
-  @Override
   public String getAuthority() {
-    return authority.name();
+    return authorityEnum.name();
   }
 }

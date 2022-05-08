@@ -1,12 +1,5 @@
 package de.mankianer.tresensystem.security;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,6 +9,14 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+
 @Log4j2
 @Component
 public class JwtTokenFilter extends OncePerRequestFilter {
@@ -24,7 +25,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
   private final UserRepository userRepository;
 
   public JwtTokenFilter(JwtTokenUtil jwtTokenUtil,
-      UserRepository userRepository) {
+                        UserRepository userRepository) {
     this.jwtTokenUtil = jwtTokenUtil;
     this.userRepository = userRepository;
   }
@@ -36,13 +37,13 @@ public class JwtTokenFilter extends OncePerRequestFilter {
       throws ServletException, IOException {
     // Get authorization header and validate
     String requestToken = request.getHeader(HttpHeaders.AUTHORIZATION);
-    if (!isBearer_Token(requestToken)) {
-      if(request.getCookies() != null) {
-        requestToken = Arrays.stream(request.getCookies()).filter(c -> {
-          return c.getName().equals(JwtTokenUtil.AuthorizationHeaderName);
-        }).findFirst().map(c -> c.getValue().replaceFirst("\\+", " ")).orElse(null);
+    if (!isBearerToken(requestToken)) {
+      if (request.getCookies() != null) {
+        requestToken = Arrays.stream(request.getCookies()).filter(c -> c.getName()
+                        .equals(JwtTokenUtil.AUTHORIZATION_HEADER_NAME))
+                .findFirst().map(c -> c.getValue().replaceFirst("\\+", " ")).orElse(null);
       }
-      if (!isBearer_Token(requestToken)) {
+      if (!isBearerToken(requestToken)) {
         chain.doFilter(request, response);
         return;
       }
@@ -51,7 +52,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
     // Get jwt token and validate
     final String token = requestToken.split(" ")[1].trim();
-    if (jwtTokenUtil.isTokenExpired(token)) {
+    if (Boolean.TRUE.equals(jwtTokenUtil.isTokenExpired(token))) {
       chain.doFilter(request, response);
       return;
     }
@@ -76,7 +77,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     chain.doFilter(request, response);
   }
 
-  private boolean isBearer_Token(String requestToken) {
+  private boolean isBearerToken(String requestToken) {
     return requestToken != null && requestToken.startsWith("Bearer ");
   }
 

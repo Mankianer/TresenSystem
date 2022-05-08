@@ -37,11 +37,11 @@ note across #blue: Started
 "Client\n(Admin)" -> "[GET|DELETE]\n /admin/product/{id}"
 "Client\n(Admin)" <- "[GET|DELETE]\n /admin/product/{id}": Product
 
-==Teilnehmer bearbeiten==
+==Produkt bearbeiten==
 "Client\n(Admin)" -> "[PUT]\n /admin/product/{id}": Product
 "Client\n(Admin)" <- "[PUT]\n /admin/product/{id}": Product
 
-==Teilnehmer hinzufügen==
+==Produkt hinzufügen==
 "Client\n(Admin)" -> "[POST]\n /admin/product/": Product
 "Client\n(Admin)" <- "[POST]\n /admin/product/": Product
 

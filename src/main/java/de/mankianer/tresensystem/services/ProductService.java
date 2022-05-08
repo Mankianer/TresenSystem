@@ -1,10 +1,13 @@
 package de.mankianer.tresensystem.services;
 
 import de.mankianer.tresensystem.entities.Product;
+import de.mankianer.tresensystem.exeptions.ProductNotAvailableException;
 import de.mankianer.tresensystem.exeptions.ProductNotFoundException;
 import de.mankianer.tresensystem.exeptions.order.MissingValueException;
 import de.mankianer.tresensystem.repository.ProductRepository;
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
 @Service
@@ -53,12 +56,13 @@ public class ProductService {
    * @return updated Product
    * @throws ProductNotFoundException if Product not found
    * @throws MissingValueException if Product has no id
+   * @throws ProductNotAvailableException if Product is not available
    */
   public Product updateProduct(Product product)
-      throws MissingValueException, ProductNotFoundException {
+          throws MissingValueException, ProductNotFoundException, ProductNotAvailableException {
     if(product.getId() != null) {
-      if(!productRepository.existsById(product.getId())){
-        throw new ProductNotFoundException("Product not found. id: " + product.getId());
+      if(!getProductById(product.getId()).isAvailable()) {
+        throw new ProductNotAvailableException("Product not available. id: " + product.getId());
       }
       return productRepository.save(product);
     }

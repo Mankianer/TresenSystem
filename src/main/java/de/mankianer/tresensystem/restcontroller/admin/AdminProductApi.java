@@ -1,6 +1,7 @@
 package de.mankianer.tresensystem.restcontroller.admin;
 
 import de.mankianer.tresensystem.entities.Product;
+import de.mankianer.tresensystem.exeptions.ProductNotAvailableException;
 import de.mankianer.tresensystem.exeptions.ProductNotFoundException;
 import de.mankianer.tresensystem.exeptions.order.MissingValueException;
 import de.mankianer.tresensystem.services.ProductService;
@@ -9,7 +10,7 @@ import java.util.List;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("admin/products")
+@RequestMapping("admin/product/")
 public class AdminProductApi {
 
   private final ProductService productService;
@@ -34,7 +35,7 @@ public class AdminProductApi {
   }
 
   @PutMapping("{id}")
-  public Product updateProduct(@PathVariable long id, @RequestBody Product product) throws ProductNotFoundException, MissingValueException {
+  public Product updateProduct(@PathVariable long id, @RequestBody Product product) throws ProductNotFoundException, MissingValueException, ProductNotAvailableException {
     product.setId(id);
     return productService.updateProduct(product);
   }

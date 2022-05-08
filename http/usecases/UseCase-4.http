@@ -10,7 +10,7 @@ Content-Type: application/json
 
 > {%
 client.test("Request executed successfully", function() {
-  client.assert(response.status === 202, "Response status is not 202");
+  client.assert(response.status === 200, "Response status is not 200");
 });
 client.global.set("auth_token_admin", "" + response.body);
 client.global.set("username", "UseCase4_1_1");
@@ -32,7 +32,6 @@ Content-Type: application/json
 client.test("Request executed successfully", function() {
   client.assert(response.status === 200, "Response status is not 200");
 });
-client.global.set("auth_token_admin", "" + response.body);
 %}
 
 ### UseCase - Teilnehmer abfragen
@@ -42,7 +41,6 @@ GET localhost:8080/admin/user/{{username}}
 client.test("Request executed successfully", function() {
   client.assert(response.status === 200, "Response status is not 200");
 });
-client.global.set("auth_token_admin", "" + response.body);
 %}
 
 ### UseCase - Teilnehmer updaten
@@ -58,7 +56,6 @@ Content-Type: application/json
 client.test("Request executed successfully", function() {
   client.assert(response.status === 200, "Response status is not 200");
 });
-client.global.set("auth_token_admin", "" + response.body);
 %}
 
 
@@ -69,7 +66,6 @@ DELETE localhost:8080/admin/user/{{username}}
 client.test("Request executed successfully", function() {
   client.assert(response.status === 200, "Response status is not 200");
 });
-client.global.set("auth_token_admin", "" + response.body);
 %}
 
 ### UseCase - Teilnehmer abfragen 2 (nach dem löschen)
@@ -79,7 +75,6 @@ GET localhost:8080/admin/user/{{username}}
 client.test("Request executed successfully", function() {
   client.assert(response.status === 200, "Response status is not 200");
 });
-client.global.set("auth_token_admin", "" + response.body);
 %}
 
 ### UseCase - 4.1.2 Barkeeper verwalten 1
@@ -96,7 +91,6 @@ Content-Type: application/json
 client.test("Request executed successfully", function() {
   client.assert(response.status === 200, "Response status is not 200");
 });
-client.global.set("auth_token_admin", "" + response.body);
 %}
 
 ### UseCase - 4.1.2 Barkeeper verwalten 2
@@ -111,7 +105,6 @@ Content-Type: application/json
 client.test("Request executed successfully", function() {
   client.assert(response.status === 200, "Response status is not 200");
 });
-client.global.set("auth_token_admin", "" + response.body);
 %}
 
 ### UseCase - 4.1.3 Kassenwart verwalten 1
@@ -128,7 +121,6 @@ Content-Type: application/json
 client.test("Request executed successfully", function() {
   client.assert(response.status === 200, "Response status is not 200");
 });
-client.global.set("auth_token_admin", "" + response.body);
 %}
 
 ### UseCase - 4.1.3 Kassenwart verwalten 2
@@ -142,5 +134,54 @@ Content-Type: application/json
 client.test("Request executed successfully", function() {
   client.assert(response.status === 200, "Response status is not 200");
 });
-client.global.set("auth_token_admin", "" + response.body);
+%}
+
+### #UseCase - 4.2 Produkte Verwalten
+### Produkt hinzufügen
+POST localhost:8080/admin/product/
+Content-Type: application/json
+
+{
+  "name": "UseCase-4.2",
+  "price": 100
+}
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+client.global.set("productID", "" + response.body.id);
+%}
+
+
+### Produkt bearbeiten
+PUT localhost:8080/admin/product/{{productID}}
+Content-Type: application/json
+
+{
+  "id": {{productID}},
+  "name": "UseCase-4.2",
+  "price": 150
+}
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+### Produkt deaktivieren
+DELETE localhost:8080/admin/product/{{productID}}
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+### Produkt abfragen
+GET localhost:8080/admin/product/{{productID}}
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
 %}

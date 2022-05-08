@@ -31,7 +31,7 @@ note across #yellow: Not Started
 @enduml
 @startuml
 title Use Case 4.2 Produkte Verwalten
-note across #blue: Started
+note across #green: Finish
 
 ==Produkt abfragen/löschen==
 "Client\n(Admin)" -> "[GET|DELETE]\n /admin/product/{id}"

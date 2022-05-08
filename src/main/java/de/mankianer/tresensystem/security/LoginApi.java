@@ -45,7 +45,7 @@ public class LoginApi {
           JwtTokenUtil.AuthorizationHeaderName + "=Bearer+" + token + "; Max-Age="
               + jwtTokenUtil.JWT_TOKEN_VALIDITY + "; Path=/; HttpOnly; SameSite=None; Secure;");
 
-      return ResponseEntity.accepted().body( token );
+      return ResponseEntity.ok().body( token );
     } catch (BadCredentialsException ex) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }

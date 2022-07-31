@@ -1,0 +1,29 @@
+<h2>Bestellung</h2>
+
+<form class="mat-form-field">
+  <mat-form-field>
+    <mat-label>Name</mat-label>
+    <input matInput type="text" placeholder="Name" matInput [formControl]="orderControl" [matAutocomplete]="auto">
+    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+      <mat-option *ngFor="let option of filteredOptions | async" [value]="option.name">
+        {{option.name}}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+  <div *ngFor="let product of order" class="button-field">
+    <a style="margin-top: auto; margin-bottom: auto;" mat-button color="warn" (click)="subAmount(product)">
+      <mat-icon>remove</mat-icon>
+    </a>
+    <mat-form-field class="order-amount-field">
+      <mat-label>{{product.name}}</mat-label>
+      <input matInput type="number" [(ngModel)]="product.amount" name="{{product.name}}" min="0">
+    </mat-form-field>
+    <a style="margin-top: auto; margin-bottom: auto;" mat-button color="accent" (click)="addAmount(product)">
+      <mat-icon>add</mat-icon>
+    </a>
+  </div>
+</form>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close>Abbrechen</button>
+  <button mat-button [mat-dialog-close]="'success'" [disabled]="!isValid()" color="primary">Bestellen</button>
+</mat-dialog-actions>

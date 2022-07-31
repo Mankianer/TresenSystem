@@ -1,0 +1,15 @@
+.user-table {
+  width: 100%;
+}
+
+.floating-menu {
+  position: absolute;
+  right: 0;
+  z-index: 100;
+}
+
+.inner-menu {
+  position: relative;
+  top: 5px;
+  right: 5px;
+}

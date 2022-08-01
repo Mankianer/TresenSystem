@@ -1,17 +1,19 @@
 package de.mankianer.tresensystem.services;
 
-import de.mankianer.tresensystem.exeptions.UserMissingException;
 import de.mankianer.tresensystem.exeptions.UserExistsException;
+import de.mankianer.tresensystem.exeptions.UserMissingException;
 import de.mankianer.tresensystem.exeptions.UserNotFoundException;
 import de.mankianer.tresensystem.security.UserRepository;
 import de.mankianer.tresensystem.security.entities.Authority;
 import de.mankianer.tresensystem.security.entities.Authority.AuthorityEnum;
 import de.mankianer.tresensystem.security.entities.User;
-
-import java.util.*;
-import java.util.stream.Collectors;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -50,7 +52,7 @@ public class UserService {
     User oldUser = userRepository.findByUsername(user.getUsername()).orElseThrow(() -> new UserMissingException(user.getUsername()));
     String password = (user.getPassword() == null) ? oldUser.getPassword() : user.getPassword();
     Collection<Authority> authorities = (user.getAuthorities() == null ? oldUser.getAuthorities() : user.getAuthorities());
-    newUser(oldUser.getUsername(), password, user.getPassword() == null, authorities);
+    newUserObject(oldUser.getUsername(), password, user.getPassword() == null, authorities);
     return userRepository.save(user);
   }
 
@@ -83,8 +85,8 @@ public class UserService {
    * @param password get encoded with {@link PasswordEncoder}
    * @return unsaved user
    */
-  public User newUser(String username, String password, AuthorityEnum... authorities) {
-   return newUser(username, password, false, authorities);
+  public User newUserObject(String username, String password, AuthorityEnum... authorities) {
+    return newUserObject(username, password, false, authorities);
   }
 
   /**
@@ -93,11 +95,11 @@ public class UserService {
    * @param password get encoded with {@link PasswordEncoder} if @param isPasswordEncoded is false
    * @return unsaved user
    */
-  public User newUser(String username, String password, boolean isPasswordHashed, AuthorityEnum... authorities) {
+  public User newUserObject(String username, String password, boolean isPasswordHashed, AuthorityEnum... authorities) {
     List<Authority> authorityList = Arrays.stream(authorities)
-        .map(e -> new Authority(null, e, username))
-        .collect(Collectors.toList());
-    return newUser(username, password, isPasswordHashed, authorityList);
+            .map(e -> new Authority(null, e, username))
+            .collect(Collectors.toList());
+    return newUserObject(username, password, isPasswordHashed, authorityList);
   }
 
   /**
@@ -106,10 +108,10 @@ public class UserService {
    * @param password get encoded with {@link PasswordEncoder} if @param isPasswordEncoded is false
    * @return unsaved user
    */
-  public User newUser(String username, String password, boolean isPasswordHashed, Collection<Authority> authorities) {
+  public User newUserObject(String username, String password, boolean isPasswordHashed, Collection<Authority> authorities) {
     User user = new User();
     user.setUsername(username);
-    if(!isPasswordHashed && password != null) {
+    if (!isPasswordHashed && password != null) {
       user.setHashedPassword(passwordEncoder.encode(password));
     } else {
       user.setHashedPassword(password);

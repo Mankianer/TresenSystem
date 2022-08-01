@@ -5,12 +5,14 @@ import de.mankianer.tresensystem.security.entities.Authority;
 import de.mankianer.tresensystem.services.ProductService;
 import de.mankianer.tresensystem.services.UserService;
 import lombok.SneakyThrows;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 
+@Log4j2
 @Profile("demo")
 @Component
 public class DemoDataCreator {
@@ -23,6 +25,7 @@ public class DemoDataCreator {
 
     @PostConstruct
     public void init() {
+        log.warn("Starting demo data creation");
         createDemoUser();
         createDemoCustomers();
         createDemoProducts();
@@ -31,23 +34,25 @@ public class DemoDataCreator {
     /**
      * Creates demo users (User, Admin, Barkeeper, treasurer)
      */
+    @SneakyThrows
     public void createDemoUser() {
-        userService.newUser("user", "user", Authority.AuthorityEnum.USER);
-        userService.newUser("admin", "admin", Authority.AuthorityEnum.ADMIN);
-        userService.newUser("barkeeper", "barkeeper", Authority.AuthorityEnum.BARKEEPER);
-        userService.newUser("treasurer", "treasurer", Authority.AuthorityEnum.TREASURER);
+        userService.createUser(userService.newUserObject("user", "user", Authority.AuthorityEnum.USER));
+        userService.createUser(userService.newUserObject("admin", "admin", Authority.AuthorityEnum.ADMIN));
+        userService.createUser(userService.newUserObject("barkeeper", "barkeeper", Authority.AuthorityEnum.BARKEEPER));
+        userService.createUser(userService.newUserObject("treasurer", "treasurer", Authority.AuthorityEnum.TREASURER));
     }
 
     /**
      * Creates demo users
      */
+    @SneakyThrows
     public void createDemoCustomers() {
-        userService.newUser("John Wolf", "user", Authority.AuthorityEnum.USER);
-        userService.newUser("Thomas Müller", "user", Authority.AuthorityEnum.USER);
-        userService.newUser("Hans Jürgens", "user", Authority.AuthorityEnum.USER);
-        userService.newUser("Sarah Froh", "user", Authority.AuthorityEnum.USER);
-        userService.newUser("Peter Müller", "user", Authority.AuthorityEnum.USER);
-        userService.newUser("Ute Pillow", "user", Authority.AuthorityEnum.USER);
+        userService.createUser(userService.newUserObject("John Wolf", "user", Authority.AuthorityEnum.USER));
+        userService.createUser(userService.newUserObject("Thomas Müller", "user", Authority.AuthorityEnum.USER));
+        userService.createUser(userService.newUserObject("Hans Jürgens", "user", Authority.AuthorityEnum.USER));
+        userService.createUser(userService.newUserObject("Sarah Froh", "user", Authority.AuthorityEnum.USER));
+        userService.createUser(userService.newUserObject("Peter Müller", "user", Authority.AuthorityEnum.USER));
+        userService.createUser(userService.newUserObject("Ute Pillow", "user", Authority.AuthorityEnum.USER));
     }
 
     /**

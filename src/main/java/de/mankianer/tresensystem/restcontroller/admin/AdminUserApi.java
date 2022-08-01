@@ -28,13 +28,13 @@ public class AdminUserApi {
 
     @PostMapping("{username}")
     public ResponseUserDTO createUser(@PathVariable String username, @RequestBody CreateUserDTO userDTO, @RequestParam(defaultValue = "false") boolean isPasswordHashed) throws UserExistsException {
-        User user = userService.newUser(username, userDTO.getPassword(), isPasswordHashed, userDTO.getAuthorities());
+        User user = userService.newUserObject(username, userDTO.getPassword(), isPasswordHashed, userDTO.getAuthorities());
         return convertUserToResponseUserDTO(userService.createUser(user));
     }
 
     @PutMapping("{username}")
     public ResponseUserDTO updateUser(@PathVariable String username, @RequestBody CreateUserDTO userDTO, @RequestParam(defaultValue = "false") boolean isPasswordHashed) throws UserMissingException {
-        User user = userService.newUser(username, userDTO.getPassword(), isPasswordHashed, userDTO.getAuthorities());
+        User user = userService.newUserObject(username, userDTO.getPassword(), isPasswordHashed, userDTO.getAuthorities());
         return convertUserToResponseUserDTO(userService.updateUser(user));
     }
 

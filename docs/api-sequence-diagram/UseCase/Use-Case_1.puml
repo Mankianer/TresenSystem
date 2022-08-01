@@ -60,8 +60,8 @@ title Use Case 1.3.1 - Getränk bestellen - via Tresen
 note across #yellow: Not Started
 
 ==Produkte abfragen (auswählen)==
-"Client\n(Barkeeper)" -> "[GET]\n /public/products/":
-"Client\n(Barkeeper)" <- "[GET]\n /public/products/": Product[]
+"Client\n(Barkeeper)" -> "[GET]\n /bar/product/":
+"Client\n(Barkeeper)" <- "[GET]\n /bar/product/": Product[]
 
 ==Nutzer Liste abfragen==
 "Client\n(Barkeeper)" -> "[GET]\n /bar/users/":
@@ -76,8 +76,8 @@ note across #yellow: Not Started
 title Use Case 1.3.2 - Getränk bestellen - via App
 note across #red: Not Planned
 ==Produkte abfragen (auswählen)==
-"Client\n(User)" -> "[GET]\n /public/products/":
-"Client\n(User)" <- "[GET]\n /public/products/": Product[]
+"Client\n(User)" -> "[GET]\n /user/product/":
+"Client\n(User)" <- "[GET]\n /user/product/": Product[]
 
 ==Bestellung abschicken==
 "Client\n(User)" -> "[POST]\n /user/order/": CreateOrder

@@ -49,27 +49,38 @@ Content-Type: application/json
 
 {
   "id": null,
-  "purchaser": {
-    "name": "Ute Pillow"
-  },
-  "positions": [
-    {
-      "product": {
-        "id": 1
-      },
-      "amount": 1
-    },
-    {
-      "product": {
-        "id": 2
-      },
-      "amount": 2
-    },
-    {
-      "product": {
-        "id": 3
-      },
-      "amount": 3
-    }
-  ]
+  "purchaser": "Ute Pillow",
+  "positions": {
+    "11": 20,
+    "12": 10
+  }
 }
+
+### Bestellung abschicken mit Fehler
+POST localhost:8080/bar/order/
+Content-Type: application/json
+
+{
+  "id": null,
+  "purchaser": "Ute Pillow",
+  "positions": {
+    "0": 20,
+    "12": 10
+  }
+}
+
+### Bestellung abschicken mit Fehler
+POST localhost:8080/bar/order/
+Content-Type: application/json
+
+{
+  "id": null,
+  "purchaser": "Ute PillX",
+  "positions": {
+    "0": 20,
+    "12": 10
+  }
+}
+
+### Bestellung stornieren
+DELETE localhost:8080/bar/order/18/

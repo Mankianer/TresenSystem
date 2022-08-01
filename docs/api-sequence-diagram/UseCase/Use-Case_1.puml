@@ -41,7 +41,7 @@ note across #yellow: Not Started
 
 @startuml
 title Use Case 1.3 - Getränk bestellen
-note across #yellow: Not Started
+note across #green: Finish
 
 hnote across: Bestellung über Tresen
 
@@ -50,14 +50,14 @@ hnote across: Bestellung über Tresen
 "Client\n(Barkeeper)" <- "[POST]\n /bar/orders/": Order
 
 ==Bestellung stornieren==
-"Client\n(Barkeeper)" -> "[PUT]\n /bar/order/{id}/cancel": Order
-"Client\n(Barkeeper)" <- "[PUT]\n /bar/order/{id}/cancel": Order
+"Client\n(Barkeeper)" -> "[DELETE]\n /bar/order/{id}/": Order
+"Client\n(Barkeeper)" <- "[DELETE]\n /bar/order/{id}/": Order
 
 @enduml
 
 @startuml
 title Use Case 1.3.1 - Getränk bestellen - via Tresen
-note across #yellow: Not Started
+note across #green: Finish
 
 ==Produkte abfragen (auswählen)==
 "Client\n(Barkeeper)" -> "[GET]\n /bar/product/":

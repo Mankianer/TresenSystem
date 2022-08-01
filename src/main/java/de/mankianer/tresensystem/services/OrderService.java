@@ -1,16 +1,24 @@
 package de.mankianer.tresensystem.services;
 
 import de.mankianer.tresensystem.entities.Order;
+import de.mankianer.tresensystem.entities.OrderPosition;
+import de.mankianer.tresensystem.entities.OrderPositionID;
+import de.mankianer.tresensystem.exeptions.ProductNotFoundException;
+import de.mankianer.tresensystem.exeptions.UserMisMatchingException;
+import de.mankianer.tresensystem.exeptions.UserNotFoundException;
 import de.mankianer.tresensystem.exeptions.order.MissingValueException;
 import de.mankianer.tresensystem.exeptions.order.OrderNotFound;
 import de.mankianer.tresensystem.repository.OrderRepository;
 import de.mankianer.tresensystem.repository.ProductRepository;
+import de.mankianer.tresensystem.restcontroller.dto.UpdateOrderDTO;
 import de.mankianer.tresensystem.security.entities.Authority.AuthorityEnum;
 import de.mankianer.tresensystem.security.entities.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class OrderService {
@@ -18,8 +26,14 @@ public class OrderService {
   private final OrderRepository orderRepository;
   private final ProductRepository productRepository;
 
+  @Autowired
+  private UserService userService;
+
+  @Autowired
+  private ProductService productService;
+
   public OrderService(OrderRepository orderRepository,
-      ProductRepository productRepository) {
+                      ProductRepository productRepository) {
     this.orderRepository = orderRepository;
     this.productRepository = productRepository;
   }
@@ -96,5 +110,46 @@ public class OrderService {
   public Order updateOrder(Order order) throws OrderNotFound {
     orderRepository.existsById(order.getId());
     return orderRepository.save(order);
+  }
+
+  /**
+   * Convert an UpdateOrderDTO to an Order
+   * and validates the order
+   *
+   * @param updateOrderDTO
+   * @return
+   * @throws UserNotFoundException
+   * @throws ProductNotFoundException
+   * @throws OrderNotFound
+   * @throws UserMisMatchingException
+   */
+  public Order getOrderFromUpdateOrderDTO(UpdateOrderDTO updateOrderDTO) throws UserNotFoundException, ProductNotFoundException, OrderNotFound, UserMisMatchingException {
+    Order order;
+    if (updateOrderDTO.getId() == null) {
+      order = new Order();
+      User user = userService.findUser(updateOrderDTO.getPurchaser());
+      order.setPurchaser(user);
+      setPositionFromUpdate(updateOrderDTO, order);
+      order.setCreatedAt(LocalDateTime.now());
+      order.setCreatedByUser(false);
+
+    } else {
+      order = getOrderById(updateOrderDTO.getId());
+      if (!order.getPurchaser().getUsername().equals(updateOrderDTO.getPurchaser())) {
+        throw new UserMisMatchingException(order.getPurchaser().getUsername(), updateOrderDTO.getPurchaser());
+      }
+      setPositionFromUpdate(updateOrderDTO, order);
+    }
+    return order;
+  }
+
+  private void setPositionFromUpdate(UpdateOrderDTO updateOrderDTO, Order order) throws ProductNotFoundException {
+    try {
+      order.setPositions(updateOrderDTO.getPositions().entrySet().stream()
+              .map(e -> Map.entry(productRepository.findById(e.getKey()).orElse(null), e.getValue()))
+              .map(e -> new OrderPosition(new OrderPositionID(order, e.getKey()), e.getValue())).toList());
+    } catch (NullPointerException e) {
+      throw new ProductNotFoundException(String.format("product not found! %s", updateOrderDTO.getPositions()));
+    }
   }
 }

@@ -1,9 +1,13 @@
 package de.mankianer.tresensystem.restcontroller.barkeeper;
 
 import de.mankianer.tresensystem.entities.Order;
+import de.mankianer.tresensystem.exeptions.ProductNotFoundException;
+import de.mankianer.tresensystem.exeptions.UserMisMatchingException;
+import de.mankianer.tresensystem.exeptions.UserNotFoundException;
 import de.mankianer.tresensystem.exeptions.order.MissingValueException;
 import de.mankianer.tresensystem.exeptions.order.OrderNotFound;
 import de.mankianer.tresensystem.restcontroller.dto.OrderDTO;
+import de.mankianer.tresensystem.restcontroller.dto.UpdateOrderDTO;
 import de.mankianer.tresensystem.services.OrderService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -24,19 +28,20 @@ public class BarkeeperOrderApi {
   }
 
   @GetMapping("{id}")
-  public ResponseEntity<Order> getOrder(Authentication authentication, @PathVariable Long id) {
+  public ResponseEntity<OrderDTO> getOrder(Authentication authentication, @PathVariable Long id) {
     try {
-      return ResponseEntity.ok(orderService.getOrderById(id));
+      return ResponseEntity.ok(new OrderDTO(orderService.getOrderById(id)));
     } catch (OrderNotFound e) {
       return ResponseEntity.noContent().build();
     }
   }
 
-  @PostMapping("{id}")
-  public ResponseEntity<Order> createOrder(Authentication authentication, @RequestBody OrderDTO orderDTO)
-          throws MissingValueException {
-    Order order = orderDTO.toOrder();
-    return ResponseEntity.ok(orderService.createOrderByBarkeeper(order));
+  @PostMapping("")
+  public ResponseEntity<OrderDTO> createOrder(Authentication authentication, @RequestBody UpdateOrderDTO orderDTO)
+          throws MissingValueException, UserNotFoundException, UserMisMatchingException, ProductNotFoundException, OrderNotFound {
+    Order order = orderService.getOrderFromUpdateOrderDTO(orderDTO);
+    order = orderService.createOrderByBarkeeper(order);
+    return ResponseEntity.ok(new OrderDTO(order));
   }
 
   @GetMapping("")
@@ -45,12 +50,15 @@ public class BarkeeperOrderApi {
     return ordersPastTime;
   }
 
-  @PutMapping("{id}/cancel")
-  public ResponseEntity<Order> cancelOrder(Authentication authentication, @PathVariable Long id) throws OrderNotFound {
+  @DeleteMapping("{id}/")
+  public ResponseEntity<OrderDTO> cancelOrder(Authentication authentication, @PathVariable Long id) throws OrderNotFound {
     Order order = orderService.getOrderById(id);
-    order.setCanceledAt(LocalDateTime.now());
-    orderService.updateOrder(order);
-    return ResponseEntity.ok(order);
+    if (!order.isCanceled()) {
+      order.setCanceledAt(LocalDateTime.now());
+      orderService.updateOrder(order);
+      return ResponseEntity.ok(new OrderDTO(order));
+    }
+    return ResponseEntity.badRequest().build();
   }
 
 }

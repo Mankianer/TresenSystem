@@ -88,5 +88,14 @@ public class DemoDataCreator {
         OrderPosition orderPosition = new OrderPosition(new OrderPositionID(order, productService.getProductById(11L)), 2);
         order.setPositions(List.of(orderPosition));
         orderService.createOrderByBarkeeper(order);
+
+        order = new Order();
+        order.setPurchaser(userService.findUser("Sarah Froh"));
+        order.setCreatedAt(LocalDateTime.now());
+        order.setCreatedByUser(false);
+        orderPosition = new OrderPosition(new OrderPositionID(order, productService.getProductById(11L)), 4);
+        OrderPosition orderPosition2 = new OrderPosition(new OrderPositionID(order, productService.getProductById(12L)), 2);
+        order.setPositions(List.of(orderPosition, orderPosition2));
+        orderService.createOrderByBarkeeper(order);
     }
 }

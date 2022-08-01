@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("bar/")
+@RequestMapping("bar/order/")
 public class BarkeeperOrderApi {
 
   private final OrderService orderService;
@@ -21,7 +21,7 @@ public class BarkeeperOrderApi {
     this.orderService = orderService;
   }
 
-  @GetMapping("order/{id}")
+  @GetMapping("{id}")
   public ResponseEntity<Order> getOrder(Authentication authentication, @PathVariable Long id) {
     try {
       return ResponseEntity.ok(orderService.getOrderById(id));
@@ -30,19 +30,19 @@ public class BarkeeperOrderApi {
     }
   }
 
-  @PostMapping("order/{id}")
+  @PostMapping("{id}")
   public ResponseEntity<Order> createOrder(Authentication authentication, @RequestBody OrderDTO order)
           throws MissingValueException {
     return ResponseEntity.ok(orderService.createOrderByBarkeeper(order.toOrder()));
   }
 
-  @PutMapping("order/{id}")
+  @PutMapping("{id}")
   public ResponseEntity<Order> updateOrder(Authentication authentication, @RequestBody OrderDTO order)
           throws OrderNotFound {
     return ResponseEntity.ok(orderService.updateOrder(order.toOrder()));
   }
 
-  @GetMapping("orders/")
+  @GetMapping("")
   public List<Order> getAllOrders(Authentication authentication) {
     return orderService.getOrdersPastTime(2);
   }

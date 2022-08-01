@@ -3,6 +3,7 @@ package de.mankianer.tresensystem.services;
 import de.mankianer.tresensystem.exeptions.UserExistsException;
 import de.mankianer.tresensystem.exeptions.UserMissingException;
 import de.mankianer.tresensystem.exeptions.UserNotFoundException;
+import de.mankianer.tresensystem.restcontroller.dto.ResponseUserDTO;
 import de.mankianer.tresensystem.security.UserRepository;
 import de.mankianer.tresensystem.security.entities.Authority;
 import de.mankianer.tresensystem.security.entities.Authority.AuthorityEnum;
@@ -118,5 +119,10 @@ public class UserService {
     }
     user.setAuthorities(authorities);
     return user;
+  }
+
+  public ResponseUserDTO convertUserToResponseUserDTO(User user) {
+    return new ResponseUserDTO(user.getUsername(), user.getAuthorities().stream().map(Authority::getAuthorityEnum)
+            .map(Authority.AuthorityEnum::name).toList(), user.isEnabled());
   }
 }

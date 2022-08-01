@@ -11,7 +11,7 @@ note across #green: Finish
 
 @startuml
 title Use Case 1 - Abrechnungstoken (QR-Code)
-note across #yellow: Not Started
+note across #red: Not Planned
 
 "Client\n(User)" -> "[GET]\n /user/qr":
 "Client\n(User)" <- "[GET]\n /user/qr": QR-Code

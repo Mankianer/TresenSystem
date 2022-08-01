@@ -22,10 +22,10 @@ title Use Case 1.1 - Bestellhistorie ansehen
 note across #blue: Started
 ==Alle Bestellungen==
 "Client\n(User)" -> "[GET]\n /user/orders/":
-"Client\n(User)" <- "[GET]\n /user/orders/": Order[]
+"Client\n(User)" <- "[GET]\n /user/orders/": OrderDTO[]
 ==Einzel Bestellungen==
 "Client\n(User)" -> "[GET]\n /user/order/{id}":
-"Client\n(User)" <- "[GET]\n /user/order/{id}": Order
+"Client\n(User)" <- "[GET]\n /user/order/{id}": OrderDTO
 @enduml
 
 @startuml
@@ -46,12 +46,12 @@ note across #green: Finish
 hnote across: Bestellung über Tresen
 
 ==Barkeeper nimmt Bestellung auf und gibt diese raus==
-"Client\n(Barkeeper)" -> "[POST]\n /bar/orders/": Order
-"Client\n(Barkeeper)" <- "[POST]\n /bar/orders/": Order
+"Client\n(Barkeeper)" -> "[POST]\n /bar/orders/": OrderDTO
+"Client\n(Barkeeper)" <- "[POST]\n /bar/orders/": OrderDTO
 
 ==Bestellung stornieren==
-"Client\n(Barkeeper)" -> "[DELETE]\n /bar/order/{id}/": Order
-"Client\n(Barkeeper)" <- "[DELETE]\n /bar/order/{id}/": Order
+"Client\n(Barkeeper)" -> "[DELETE]\n /bar/order/{id}/": OrderDTO
+"Client\n(Barkeeper)" <- "[DELETE]\n /bar/order/{id}/": OrderDTO
 
 @enduml
 
@@ -61,15 +61,15 @@ note across #green: Finish
 
 ==Produkte abfragen (auswählen)==
 "Client\n(Barkeeper)" -> "[GET]\n /bar/product/":
-"Client\n(Barkeeper)" <- "[GET]\n /bar/product/": Product[]
+"Client\n(Barkeeper)" <- "[GET]\n /bar/product/": ProductDTO[]
 
 ==Nutzer Liste abfragen==
 "Client\n(Barkeeper)" -> "[GET]\n /bar/users/":
-"Client\n(Barkeeper)" <- "[GET]\n /bar/users/": User[]
+"Client\n(Barkeeper)" <- "[GET]\n /bar/users/": UserDTO[]
 
 ==Bestellung abschicken==
-"Client\n(Barkeeper)" -> "[POST]\n /bar/orders/": Order
-"Client\n(Barkeeper)" <- "[POST]\n /bar/orders/": Order
+"Client\n(Barkeeper)" -> "[POST]\n /bar/orders/": UpdateOrderDTO
+"Client\n(Barkeeper)" <- "[POST]\n /bar/orders/": OrderDTO
 @enduml
 
 @startuml

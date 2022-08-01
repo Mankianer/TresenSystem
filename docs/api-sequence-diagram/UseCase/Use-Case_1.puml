@@ -68,7 +68,7 @@ note across #yellow: Not Started
 "Client\n(Barkeeper)" <- "[GET]\n /bar/users/": User[]
 
 ==Bestellung abschicken==
-"Client\n(Barkeeper)" -> "[POST]\n /bar/orders/": CreateOrderBar
+"Client\n(Barkeeper)" -> "[POST]\n /bar/orders/": Order
 "Client\n(Barkeeper)" <- "[POST]\n /bar/orders/": Order
 @enduml
 

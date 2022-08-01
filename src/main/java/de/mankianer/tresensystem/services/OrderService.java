@@ -56,7 +56,7 @@ public class OrderService {
    * @return the new order
    */
   public Order createOrderByBarkeeper(Order order) throws MissingValueException {
-    if (order.getPurchaser() != null) {
+    if (order.getPurchaser() == null) {
       throw new MissingValueException("purchaser is needed");
     }
     order.setCreatedByUser(false);

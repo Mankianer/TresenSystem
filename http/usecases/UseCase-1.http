@@ -16,6 +16,8 @@ client.global.set("auth_token_bar", "" + response.body);
 
 
 ### Use Case 1.1 - Bestell historie ansehen
+GET localhost:8080/bar/order/
+
 
 ### Use Case 1.2 - Kostenlimmit festlegen
 
@@ -45,3 +47,29 @@ client.test("Request executed successfully", function() {
 POST localhost:8080/bar/order/
 Content-Type: application/json
 
+{
+  "id": null,
+  "purchaser": {
+    "name": "Ute Pillow"
+  },
+  "positions": [
+    {
+      "product": {
+        "id": 1
+      },
+      "amount": 1
+    },
+    {
+      "product": {
+        "id": 2
+      },
+      "amount": 2
+    },
+    {
+      "product": {
+        "id": 3
+      },
+      "amount": 3
+    }
+  ]
+}

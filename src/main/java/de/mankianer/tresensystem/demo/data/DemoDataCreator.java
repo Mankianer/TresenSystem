@@ -1,7 +1,11 @@
 package de.mankianer.tresensystem.demo.data;
 
+import de.mankianer.tresensystem.entities.Order;
+import de.mankianer.tresensystem.entities.OrderPosition;
+import de.mankianer.tresensystem.entities.OrderPositionID;
 import de.mankianer.tresensystem.entities.Product;
 import de.mankianer.tresensystem.security.entities.Authority;
+import de.mankianer.tresensystem.services.OrderService;
 import de.mankianer.tresensystem.services.ProductService;
 import de.mankianer.tresensystem.services.UserService;
 import lombok.SneakyThrows;
@@ -11,11 +15,16 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Log4j2
 @Profile("demo")
 @Component
 public class DemoDataCreator {
+
+    @Autowired
+    OrderService orderService;
 
     @Autowired
     ProductService productService;
@@ -29,6 +38,7 @@ public class DemoDataCreator {
         createDemoUser();
         createDemoCustomers();
         createDemoProducts();
+        createDemoOrders();
     }
 
     /**
@@ -67,5 +77,16 @@ public class DemoDataCreator {
         productService.createProduct(new Product(null, "Sprite", 120, true));
         productService.createProduct(new Product(null, "Flasche", 250, true));
         productService.createProduct(new Product(null, "Flasche-alt", 200, false));
+    }
+
+    @SneakyThrows
+    public void createDemoOrders() {
+        Order order = new Order();
+        order.setPurchaser(userService.findUser("John Wolf"));
+        order.setCreatedAt(LocalDateTime.now());
+        order.setCreatedByUser(false);
+        OrderPosition orderPosition = new OrderPosition(new OrderPositionID(order, productService.getProductById(11L)), 2);
+        order.setPositions(List.of(orderPosition));
+        orderService.createOrderByBarkeeper(order);
     }
 }

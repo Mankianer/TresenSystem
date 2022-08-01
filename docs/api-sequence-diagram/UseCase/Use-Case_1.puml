@@ -50,8 +50,8 @@ hnote across: Bestellung über Tresen
 "Client\n(Barkeeper)" <- "[POST]\n /bar/orders/": Order
 
 ==Bestellung stornieren==
-"Client\n(Barkeeper)" -> "[PUT]\n /bar/order/{id}/storno": Order
-"Client\n(Barkeeper)" <- "[PUT]\n /bar/order/{id}/storno": Order
+"Client\n(Barkeeper)" -> "[PUT]\n /bar/order/{id}/cancel": Order
+"Client\n(Barkeeper)" <- "[PUT]\n /bar/order/{id}/cancel": Order
 
 @enduml
 

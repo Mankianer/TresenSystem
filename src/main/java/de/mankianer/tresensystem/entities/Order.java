@@ -15,24 +15,24 @@ public class Order {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
-  private OderStatus status = OderStatus.OPEN;
 
   @ManyToOne
   @JoinColumn(name = "purchaser_id", foreignKey = @ForeignKey(name = "fk_order_user"))
   private User purchaser;
 
-  @ManyToMany
-  @JoinTable(name = "order_products", joinColumns = @JoinColumn(name = "order_id"), inverseJoinColumns = @JoinColumn(name = "product_id"))
-  private List<Product> products;
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @JoinColumns({
+          @JoinColumn(name = "order_id", referencedColumnName = "id"),
+  })
+  private List<OrderPosition> positions;
 
   private LocalDateTime createdAt;
 
   private boolean createdByUser;
 
-  public enum OderStatus {
-    OPEN,
-    CLOSED,
-    CANCELED,
-    IN_PROGRESS
+  private LocalDateTime canceledAt;
+
+  public boolean isCanceled() {
+    return canceledAt != null;
   }
 }

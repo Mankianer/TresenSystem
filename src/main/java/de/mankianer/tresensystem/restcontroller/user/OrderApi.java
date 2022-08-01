@@ -3,13 +3,14 @@ package de.mankianer.tresensystem.restcontroller.user;
 import de.mankianer.tresensystem.entities.Order;
 import de.mankianer.tresensystem.exeptions.ProductNotFoundException;
 import de.mankianer.tresensystem.exeptions.order.OrderNotFound;
-import de.mankianer.tresensystem.restcontroller.dto.UpdateOrderDTO;
+import de.mankianer.tresensystem.restcontroller.dto.OrderDTO;
 import de.mankianer.tresensystem.security.entities.User;
 import de.mankianer.tresensystem.services.OrderService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -32,17 +33,24 @@ public class OrderApi {
     }
   }
 
-  @PostMapping("order/")
-  public ResponseEntity<Order> createOrder(Authentication authentication, @RequestBody UpdateOrderDTO orderDTO)
-          throws ProductNotFoundException {
+  @PutMapping("order/{id}/cancel")
+  public ResponseEntity<Order> cancelOrder(Authentication authentication, @PathVariable Long id) {
     User user = (User) authentication.getPrincipal();
-    return ResponseEntity.ok(orderService.createOrderbyUser(user, orderService.convertUpdateOrderDTO(orderDTO, true)));
+    try {
+      Order order = orderService.getOrderByUserAndId(user, id);
+      order.setCanceledAt(LocalDateTime.now());
+      orderService.updateOrder(order);
+      return ResponseEntity.ok(order);
+    } catch (OrderNotFound e) {
+      return ResponseEntity.noContent().build();
+    }
   }
 
-  @PutMapping("order/{id}")
-  public ResponseEntity<Order> updateOrder(Authentication authentication, @RequestBody UpdateOrderDTO orderDTO)
-          throws OrderNotFound, ProductNotFoundException {
-    return ResponseEntity.ok(orderService.convertUpdateOrderDTO(orderDTO, true));
+  @PostMapping("order/")
+  public ResponseEntity<Order> createOrder(Authentication authentication, @RequestBody OrderDTO orderDTO)
+          throws ProductNotFoundException {
+    User user = (User) authentication.getPrincipal();
+    return ResponseEntity.ok(orderService.createOrderbyUser(user, orderDTO.toOrder()));
   }
 
   @GetMapping("orders/")

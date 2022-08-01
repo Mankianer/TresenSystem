@@ -1,19 +1,16 @@
 package de.mankianer.tresensystem.services;
 
 import de.mankianer.tresensystem.entities.Order;
-import de.mankianer.tresensystem.exeptions.ProductNotFoundException;
 import de.mankianer.tresensystem.exeptions.order.MissingValueException;
 import de.mankianer.tresensystem.exeptions.order.OrderNotFound;
 import de.mankianer.tresensystem.repository.OrderRepository;
 import de.mankianer.tresensystem.repository.ProductRepository;
-import de.mankianer.tresensystem.restcontroller.dto.UpdateOrderDTO;
 import de.mankianer.tresensystem.security.entities.Authority.AuthorityEnum;
 import de.mankianer.tresensystem.security.entities.User;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class OrderService {
@@ -97,20 +94,7 @@ public class OrderService {
    * @throws OrderNotFound if the order is not found by id and user
    */
   public Order updateOrder(Order order) throws OrderNotFound {
-    getOrderById(order.getId());
+    orderRepository.existsById(order.getId());
     return orderRepository.save(order);
-  }
-
-  public Order convertUpdateOrderDTO(UpdateOrderDTO updateOrderDTO, boolean isCreatedByUser)
-      throws ProductNotFoundException {
-    Order order = new Order();
-    var oProducts = updateOrderDTO.getProducts().stream().map(productRepository::findById).toList();
-    if (oProducts.stream().anyMatch(Optional::isEmpty)) {
-      throw new ProductNotFoundException("one or more product(s) not found " + updateOrderDTO.getProducts());
-    }
-    order.setProducts(oProducts.stream().map(Optional::get).toList());
-    order.setPurchaser(updateOrderDTO.getPurchaser());
-    order.setCreatedByUser(isCreatedByUser);
-    return order;
   }
 }

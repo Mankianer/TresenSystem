@@ -10,7 +10,7 @@ note across #yellow: Not Started
 
 @startuml
 title Use Case 2.2 - Bestellung erhalten
-note across #yellow: Not Started
+note across #red: Not Planned
 
 hnote across: User bestellt via App oder via Token
 ==Barkeeper ruft OrderStream Auf==
@@ -21,7 +21,7 @@ hnote across: User bestellt via App oder via Token
 
 @startuml
 title Use Case 2.3 - Bestellung abrechnen/herausgeben
-note across #yellow: Not Started
+note across #red: Not Planned
 
 ==Barkeeper nimmt Bestellung an/ ändert Status/ lehnt ab==
 "Client\n(Barkeeper)" -> "[PUT]\n /bar/orders/{id}": OrderStatus
@@ -35,11 +35,7 @@ note across #yellow: Not Started
 
 ==Nutzer Liste abfragen==
 "Client\n(Barkeeper)" -> "[GET]\n /bar/users/":
-"Client\n(Barkeeper)" <- "[GET]\n /bar/users/": String[]
-
-==Nutzer via QR-Code abfragen==
-"Client\n(Barkeeper)" -> "[POST]\n /bar/users/": QR-Code
-"Client\n(Barkeeper)" <- "[POST]\n /bar/users/": String
+"Client\n(Barkeeper)" <- "[GET]\n /bar/users/": User[]
 
 ==Produkte abfragen (auswählen)==
 "Client\n(Barkeeper)" -> "[GET]\n /public/products/":
@@ -52,4 +48,7 @@ note across #yellow: Not Started
 ==Bestellung ändern==
 "Client\n(Barkeeper)" -> "[PUT]\n /bar/order/{id}": CreateOrder
 "Client\n(Barkeeper)" <- "[PUT]\n /bar/order/{id}": Order
+
+==Bestellung löschen==
+hnote across: siehe UseCase 1.3 (Bestellung stornieren)
 @enduml

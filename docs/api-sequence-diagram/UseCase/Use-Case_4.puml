@@ -15,7 +15,7 @@ note across #green: Finish
 @enduml
 @startuml
 title Use Case 4.1.1.1 Abrechnungstoken verwalten
-note across #yellow: Not Started
+note across #red: Not Planned
 
 ==QR-Code erstellen==
 "Client\n(Admin)" -> "[POST]\n /admin/user/{username}/qr":

@@ -21,8 +21,8 @@ note across #yellow: Not Started
 title Use Case 1.1 - Bestellhistorie ansehen
 note across #blue: Started
 ==Alle Bestellungen==
-"Client\n(User)" -> "[GET]\n /user/orders":
-"Client\n(User)" <- "[GET]\n /user/orders": Order[]
+"Client\n(User)" -> "[GET]\n /user/orders/":
+"Client\n(User)" <- "[GET]\n /user/orders/": Order[]
 ==Einzel Bestellungen==
 "Client\n(User)" -> "[GET]\n /user/order/{id}":
 "Client\n(User)" <- "[GET]\n /user/order/{id}": Order
@@ -43,23 +43,20 @@ note across #yellow: Not Started
 title Use Case 1.3 - Getränk bestellen
 note across #yellow: Not Started
 
-hnote across: User Bestellt via App oder via Token
-==Barkeeper ruft OrderStream Auf==
-"Client\n(Barkeeper)" -> "[GET]\n /bar/orders/":
-"Client\n(Barkeeper)" <- "[GET]\n /bar/orders/": Stream<Order[]>
+hnote across: Bestellung über Tresen
 
-==Barkeeper nimmt Bestellung an/ ändert Status/ lehnt ab==
-"Client\n(Barkeeper)" -> "[PUT]\n /bar/orders/{id}": OrderStatus
-"Client\n(Barkeeper)" <- "[PUT]\n /bar/orders/{id}": Order
+==Barkeeper nimmt Bestellung auf und gibt diese raus==
+"Client\n(Barkeeper)" -> "[POST]\n /bar/orders/": Order
+"Client\n(Barkeeper)" <- "[POST]\n /bar/orders/": Order
 
-==Bestellung ändern==
-"Client\n(User)" -> "[PUT]\n /bar/order/{id}": CreateOrder
-"Client\n(User)" <- "[PUT]\n /bar/order/{id}": Order
+==Bestellung stornieren==
+"Client\n(Barkeeper)" -> "[PUT]\n /bar/order/{id}/storno": Order
+"Client\n(Barkeeper)" <- "[PUT]\n /bar/order/{id}/storno": Order
 
 @enduml
 
 @startuml
-title Use Case 1.3.1 - Getränk bestellen - via Token
+title Use Case 1.3.1 - Getränk bestellen - via Tresen
 note across #yellow: Not Started
 
 ==Produkte abfragen (auswählen)==
@@ -68,11 +65,7 @@ note across #yellow: Not Started
 
 ==Nutzer Liste abfragen==
 "Client\n(Barkeeper)" -> "[GET]\n /bar/users/":
-"Client\n(Barkeeper)" <- "[GET]\n /bar/users/": String[]
-
-==Nutzer via QR-Code abfragen==
-"Client\n(Barkeeper)" -> "[POST]\n /bar/users/": QR-Code
-"Client\n(Barkeeper)" <- "[POST]\n /bar/users/": String
+"Client\n(Barkeeper)" <- "[GET]\n /bar/users/": User[]
 
 ==Bestellung abschicken==
 "Client\n(Barkeeper)" -> "[POST]\n /bar/orders/": CreateOrderBar
@@ -81,7 +74,7 @@ note across #yellow: Not Started
 
 @startuml
 title Use Case 1.3.2 - Getränk bestellen - via App
-note across #yellow: Not Started
+note across #red: Not Planned
 ==Produkte abfragen (auswählen)==
 "Client\n(User)" -> "[GET]\n /public/products/":
 "Client\n(User)" <- "[GET]\n /public/products/": Product[]
